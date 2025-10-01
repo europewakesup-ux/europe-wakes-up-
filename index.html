@@ -505,7 +505,8 @@
         const isoToKey = { ES:'spain', GB:'uk', FR:'france', DE:'germany', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
         
         let activeCountry = 'all';
-        let lastNewsTime = new Date();
+        let lastNewsTime = new Date(); // deprecated for display; kept for backwards compatibility
+        let latestPublishedAtMs = 0;
         let latestSeenTsByCountry = {};
         
         /** === Utilidades UI === **/
