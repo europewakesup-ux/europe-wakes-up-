@@ -240,17 +240,43 @@
             color: #000000;
         }
         
+        /* Contenedor para poder posicionar el enlace “(more)/(más)” */
+        .news-excerpt-wrap {
+            position: relative;
+        }
+
+        /* Resumen limitado a ~8 líneas */
         .news-excerpt {
             color: #333333;
             font-size: 1rem;
             line-height: 1.6;
             font-weight: 400;
+
             display: -webkit-box;
-            -webkit-line-clamp: 8;
+            -webkit-line-clamp: 8;       /* ← límite de 8 líneas */
             -webkit-box-orient: vertical;
             overflow: hidden;
+
+            /* deja espacio a la derecha para el botón */
+            padding-right: 56px;
         }
 
+        /* Enlace “(more)/(más)” pegado abajo a la derecha */
+        .excerpt-more {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            /* degradado para que se lea bien sobre el texto clamped */
+            background: linear-gradient(to right, rgba(255,255,255,0), #fff 40%);
+            padding-left: 8px;
+
+            color: #888;
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+        .excerpt-more:hover { color: #000; }
+        
         .more-label {
             color: #9aa0a6;
             font-size: 0.9rem;
@@ -496,17 +522,31 @@
 
     <script>
         /** === Config === **/
-        const API_BASE = "https://europe-wakes-up.onrender.com"; // backend en Render
-        const countryKeyToISO = {
-          all: null, spain: "ES", uk: "GB", france: "FR",
-          germany: "DE", italy: "IT", netherlands: "NL",
-          sweden: "SE", portugal: "PT"
-        };
-        const isoToKey = { ES:'spain', GB:'uk', FR:'france', DE:'germany', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
-        
+        const sampleNews = [
+            { title: "Security First: The Silent War Continues", url: "https://example.com/news/security-first", publishedAt: "2023-10-27T10:00:00Z", summary: "The ongoing security crisis in Europe continues to intensify. Authorities are urging citizens to remain vigilant and report suspicious activities.", country: "all", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Border Control: A New Era of Surveillance", url: "https://example.com/news/border-control", publishedAt: "2023-10-27T09:30:00Z", summary: "The European Union has implemented a comprehensive border control system to prevent unauthorized entry. This marks a significant shift in security measures.", country: "all", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "France: The Silent Revolution", url: "https://example.com/news/france-silent-revolution", publishedAt: "2023-10-27T09:00:00Z", summary: "France is undergoing a profound transformation in its security infrastructure. The government is prioritizing digital surveillance and real-time monitoring.", country: "france", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Germany: The Silent Awakening", url: "https://example.com/news/germany-silent-awakening", publishedAt: "2023-10-27T08:30:00Z", summary: "Germany is experiencing a surge in security threats. The government is implementing new measures to protect its citizens and infrastructure.", country: "germany", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Spain: The Silent Resistance", url: "https://example.com/news/spain-silent-resistance", publishedAt: "2023-10-27T08:00:00Z", summary: "Spain is facing a growing number of security incidents. The government is taking decisive action to maintain public safety.", country: "spain", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Italy: The Silent Struggle", url: "https://example.com/news/italy-silent-struggle", publishedAt: "2023-10-27T07:30:00Z", summary: "Italy is dealing with a complex security landscape. The government is implementing innovative solutions to combat threats.", country: "italy", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Netherlands: The Silent Shield", url: "https://example.com/news/netherlands-silent-shield", publishedAt: "2023-10-27T07:00:00Z", summary: "The Netherlands is strengthening its security measures. The government is investing in advanced technology and training.", country: "netherlands", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Sweden: The Silent Guardians", url: "https://example.com/news/sweden-silent-guardians", publishedAt: "2023-10-27T06:30:00Z", summary: "Sweden is preparing for a new era of security threats. The government is enhancing its defense capabilities.", country: "sweden", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "Portugal: The Silent Vigilance", url: "https://example.com/news/portugal-silent-vigilance", publishedAt: "2023-10-27T06:00:00Z", summary: "Portugal is strengthening its security measures. The government is implementing innovative solutions to protect its citizens.", country: "portugal", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "United Kingdom: The Silent Wake", url: "https://example.com/news/uk-silent-wake", publishedAt: "2023-10-27T05:30:00Z", summary: "The United Kingdom is facing a significant security challenge. The government is taking decisive action to protect its citizens and infrastructure.", country: "uk", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+        ];
+        let newsItems = [...sampleNews];
+        let currentIndex = 0;
+        let lastNewsTime = new Date();
+        let storyCount = 0;
+        let incidentCount = 847293;
         let activeCountry = 'all';
-        let lastNewsTime = new Date(); // legacy
-        const latestPublishedAtMsByCountry = {};
+
+        // i18n for (more)/(más)
+        const MORE_LABEL = (document.documentElement.lang || '').toLowerCase().startsWith('es') ? '(más)' : '(more)';
+        const isoToKey = { GB: 'uk', FR: 'france', DE: 'germany', ES: 'spain', IT: 'italy', NL: 'netherlands', SE: 'sweden', PT: 'portugal' };
+        const countryKeyToISO = { uk: 'GB', france: 'FR', germany: 'DE', spain: 'ES', italy: 'IT', netherlands: 'NL', sweden: 'SE', portugal: 'PT', all: 'ALL' };
+        const API_BASE = "https://europe-wakes-up.onrender.com"; // backend en Render
+        let latestSeenTsByCountry = {}; // { all: ms, spain: ms, ... }
  
         function toMs(dateLike) {
             const d = new Date(dateLike);
@@ -514,31 +554,16 @@
             return Number.isFinite(ms) ? ms : 0;
         }
  
-        function maybeResetTimerWithForCountry(countryKey, newMs) {
-            if (!countryKey) return;
-            const current = latestPublishedAtMsByCountry[countryKey] || 0;
-            if (newMs > current) latestPublishedAtMsByCountry[countryKey] = newMs;
-        }
-
-        function getActiveBaselineMs() {
-            const key = activeCountry || 'all';
-            return latestPublishedAtMsByCountry[key] || 0;
-        }
-        
-        /** === Utilidades UI === **/
         function updateLatestTimerFor(countryKey, items){
-          if (!Array.isArray(items) || items.length === 0) return;
-        
-          const newestTs = Math.max(...items.map(a => +new Date(a.publishedAt || 0)).filter(n => Number.isFinite(n)));
-          const prevTs = latestPublishedAtMsByCountry[countryKey] || 0;
-        
-          if (Number.isFinite(newestTs) && newestTs > prevTs){
-            latestPublishedAtMsByCountry[countryKey] = newestTs;
-            lastNewsTime = new Date(newestTs);
-          } else if (!prevTs && Number.isFinite(newestTs)) {
-            latestPublishedAtMsByCountry[countryKey] = newestTs;
-            lastNewsTime = new Date(newestTs);
-          }
+            if (!countryKey || !Array.isArray(items) || items.length === 0) return;
+            const newestTs = Math.max(
+                ...items.map(a => +new Date(a.publishedAt || 0)).filter(n => Number.isFinite(n))
+            );
+            const prevTs = latestSeenTsByCountry[countryKey] || 0;
+            if (Number.isFinite(newestTs) && (newestTs > prevTs || !prevTs)){
+                latestSeenTsByCountry[countryKey] = newestTs;
+                lastNewsTime = new Date(newestTs);
+            }
         }
                 
         function formatTime(seconds){
@@ -566,23 +591,32 @@
                 ${a.country ? `<span class="news-country">${a.country}</span>` : ''}
                 <span class="news-time">${fmt(a.publishedAt)}</span>
               </div>
-              ${a.summary ? `<p class="news-excerpt">${a.summary}</p>` : ''}
+              ${a.summary ? `
+                <div class="news-excerpt-wrap">
+                  <p class="news-excerpt">${a.summary}</p>
+                  <a class="excerpt-more" href="${a.url}" target="_blank" rel="noopener">${MORE_LABEL}</a>
+                </div>
+              ` : ''}
             </article>
           `).join('');
           document.getElementById('storyCounter').textContent = (items||[]).length;
-          lastNewsTime = new Date();
         }
         
         /** === Llamadas API === **/
         async function loadNewsFromAPI(countryKey='all', q=''){
-          const iso = countryKeyToISO[countryKey] || '';
-          const params = new URLSearchParams();
-          if (iso) params.set('country', iso);
-          if (q) params.set('q', q);
-          const res = await fetch(`${API_BASE}/api/news?`+params.toString());
-          const items = await res.json();
-          updateLatestTimerFor(countryKey, items);
-          renderNews(items);
+            const iso = countryKeyToISO[countryKey] || '';
+            const params = new URLSearchParams();
+            if (iso) params.set('country', iso);
+            if (q) params.set('q', q);
+
+            const res = await fetch(`${API_BASE}/api/news?` + params.toString());
+            const items = await res.json();
+
+            // Actualiza el timer SOLO si hay algo más nuevo
+            updateLatestTimerFor(countryKey, items);
+
+            // Render una sola vez
+            renderNews(items);
         }
         
         function colorFor(count, max){
@@ -645,7 +679,7 @@
           });
         
           // Cargas iniciales
-          loadNewsFromAPI('all');     // Europa entera
+          loadNewsFromAPI('all').catch(() => {});
           fetchCountsAndColor();      // colorear mapa
           setInterval(fetchCountsAndColor, 60_000); // refresca cada minuto
           setInterval(tickTimer, 1000);             // cronómetro "last news"
