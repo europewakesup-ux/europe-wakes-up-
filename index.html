@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUROPE WAKES UP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 80px 40px 60px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+		.brand-icon {
+			width: 18px;
+			height: 18px;
+			margin: 0 auto 12px;
+			color: #000000;
+		}
+        
+        .main-title {
+            font-size: 4rem;
+            font-weight: 300;
+            color: #000000;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666666;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+		
+		/* Merch image support for real images */
+		.merch-image img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+        }
+        
+        .country-selector {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .selector-title {
+            font-size: 0.9rem;
+            color: #666666;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .country-filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .country-filter {
+            padding: 12px 24px;
+            border: 1px solid #e5e5e5;
+            background-color: #ffffff;
+            color: #666666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .country-filter:hover {
+            border-color: #000000;
+            color: #000000;
+        }
+        
+        .country-filter.active {
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #000000;
+        }
+        
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            gap: 60px;
+        }
+        
+        .sidebar-left {
+            width: 200px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            height: fit-content;
+        }
+        
+        .merchandise {
+            margin-bottom: 40px;
+        }
+        
+        .merch-title {
+            font-size: 0.9rem;
+            color: #000000;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .merch-item {
+            display: block;
+            margin-bottom: 16px;
+            padding: 20px;
+            border: 1px solid #e5e5e5;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+        }
+        
+        .merch-item:hover {
+            border-color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .merch-image {
+            width: 100%;
+            height: 120px;
+            background-color: #f5f5f5;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .merch-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #000000;
+            margin-bottom: 4px;
+        }
+        
+        .merch-price {
+            font-size: 0.8rem;
+            color: #666666;
+        }
+        
+        .news-feed {
+            flex: 1;
+            padding: 0 20px;
+        }
+        
+        .news-item {
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .news-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .news-title {
+            font-size: 1.5rem;
+            color: #000000;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+        }
+        
+        .news-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .news-title a:hover {
+            color: #666666;
+        }
+        
+        .news-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: #666666;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        
+        .news-source {
+            color: #000000;
+        }
+        
+        .news-excerpt {
+            color: #333333;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        .sidebar-right {
+            width: 220px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            height: fit-content;
+        }
+        
+        .stats-container {
+            margin-bottom: 40px;
+        }
+        
+        .stat-item {
+            margin-bottom: 32px;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            color: #000000;
+            font-weight: 300;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            letter-spacing: -1px;
+        }
+        
+        .timer-value {
+            color: #000000;
+        }
+        
+        .europe-map {
+            margin-top: 40px;
+        }
+        
+        .map-title {
+            font-size: 0.8rem;
+            color: #666666;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        #map {
+            width: 100%;
+            max-width: 220px;
+            border: 1px solid #e5e5e5;
+            background: #fafafa;
+            overflow: hidden;
+        }
+        #map svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        #map svg path {
+            fill: #f0f0f0;
+            stroke: #cccccc;
+            stroke-width: 0.5;
+            cursor: pointer;
+            transition: fill 0.2s ease, opacity 0.2s ease;
+        }
+        #map svg path:hover {
+            opacity: 0.9;
+        }
+        .map-legend {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #666666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-bar {
+            flex: 1;
+            height: 8px;
+            background: linear-gradient(90deg, rgb(255,240,240), rgb(255,0,0));
+            border: 1px solid #e5e5e5;
+        }
+        
+        .loading-indicator {
+            text-align: center;
+            padding: 60px;
+            color: #666666;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #e5e5e5;
+            border-radius: 50%;
+            border-top-color: #000000;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 12px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 40px 20px;
+                gap: 40px;
+            }
+            
+            .sidebar-left, .sidebar-right {
+                width: 100%;
+                position: static;
+            }
+            
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .country-selector {
+                padding: 0 20px;
+            }
+            
+            .merchandise {
+                display: flex;
+                gap: 16px;
+            }
+            
+            .merch-item {
+                flex: 1;
+            }
+            
+            #map {
+                width: 100%;
+                height: 200px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+		<div class="brand-icon" aria-hidden="true">
+			<svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+				<line x1="12" y1="4" x2="12" y2="20" stroke="currentColor" stroke-width="2"/>
+				<line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2"/>
+			</svg>
+		</div>
+        <h1 class="main-title" id="siteTitle">EUROPE WAKES UP</h1>
+		<p class="subtitle" id="siteSubtitle">United as One Against the Silent War</p>
+    </div>
+    
+    <div class="country-selector">
+        <div class="selector-title">Filter by Country</div>
+        <div class="country-filters">
+			<div class="country-filter active" data-country="all" data-title="EUROPE WAKES UP" data-subtitle="United as One Against the Silent War">All Europe</div>
+			<div class="country-filter" data-country="spain" data-title="España, despierta" data-subtitle="Unidos como Uno contra la Guerra Silenciosa">Spain</div>
+			<div class="country-filter" data-country="uk" data-title="England, Wake Up" data-subtitle="United as One Against the Silent War">United Kingdom</div>
+			<div class="country-filter" data-country="france" data-title="France, Réveille-toi" data-subtitle="Unis comme Un contre la Guerre Silencieuse">France</div>
+			<div class="country-filter" data-country="germany" data-title="Deutschland, Wach Auf" data-subtitle="Vereint als Eins gegen den Stillen Krieg">Germany</div>
+			<div class="country-filter" data-country="italy" data-title="Italia, Svegliati" data-subtitle="Uniti come Uno contro la Guerra Silenziosa">Italy</div>
+			<div class="country-filter" data-country="netherlands" data-title="Nederland, Ontwaak" data-subtitle="Verenigd als Eén tegen de Stille Oorlog">Netherlands</div>
+			<div class="country-filter" data-country="sweden" data-title="Sverige, Vakna" data-subtitle="Förenade som En mot det Tysta Kriget">Sweden</div>
+			<div class="country-filter" data-country="portugal" data-title="Portugal, Acorda" data-subtitle="Unidos como Um contra a Guerra Silenciosa">Portugal</div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <aside class="sidebar-left">
+            <div class="merchandise">
+                <h3 class="merch-title">Support the Cause</h3>
+                <div class="merch-item" onclick="alert('Security First Hoodie - would redirect to shop')">
+					<div class="merch-image"><img id="hoodieImage" src="assets/hoodie.png" alt="EUROPE WAKES UP Hoodie" /></div>
+                    <div class="merch-name">Security First Hoodie</div>
+                    <div class="merch-price">€45</div>
+                </div>
+                <div class="merch-item" onclick="alert('Border Control Tee - would redirect to shop')">
+					<div class="merch-image"><img id="teeImage" src="assets/tee.png" alt="EUROPE WAKES UP T-Shirt" /></div>
+                    <div class="merch-name">Border Control Tee</div>
+                    <div class="merch-price">€25</div>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="news-feed" id="newsFeed">
+            <!-- News items will be populated here -->
+        </main>
+        
+        <aside class="sidebar-right">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-label">Time Since Last News</div>
+                    <div class="stat-value timer-value" id="lastNewsTimer">00:00</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Crime Incidents 2024</div>
+                    <div class="stat-value" id="incidentCounter">847,293</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Stories Today</div>
+                    <div class="stat-value" id="storyCounter">0</div>
+                </div>
+            </div>
+            
+            <div class="europe-map">
+                <div class="map-title">Stories by Country</div>
+                <div id="map">
+<?xml version="1.0"?><svg baseprofile="tiny" fill="#ececec" height="684" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewBox="0 0 1000 684" width="1000" xmlns="http://www.w3.org/2000/svg">
+ <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
+ </path>
+ <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
+ </path>
+</svg>
+				</div>
+				<div class="map-legend">
+					<span id="legendMin">0</span>
+					<div class="legend-bar"></div>
+					<span id="legendMax">0</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <div class="loading-indicator" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        Loading more security news...
+    </div>
+
+    <script>
+        // Sample news data with country filtering
+        const sampleNews = [
+            {
+                title: "Sweden Reports 40% Increase in Gang Violence Linked to Immigration",
+                source: "SVT",
+                country: "sweden",
+                countryName: "Sweden",
+                time: "2 minutes ago",
+                excerpt: "Swedish police report a dramatic rise in organized crime incidents in major cities, with authorities pointing to failed integration policies and uncontrolled migration as primary factors."
+            },
+            {
+                title: "French Police Clash with Islamist Groups in Paris Suburbs",
+                source: "Le Figaro",
+                country: "france",
+                countryName: "France",
+                time: "15 minutes ago",
+                excerpt: "Riots erupted in several Parisian suburbs after police attempted to dismantle an illegal mosque promoting radical ideologies. Over 50 arrests made as tensions escalate."
+            },
+            {
+                title: "German Authorities Foil Terror Plot Linked to North African Network",
+                source: "Der Spiegel",
+                country: "germany",
+                countryName: "Germany",
+                time: "32 minutes ago",
+                excerpt: "Security services in Berlin have prevented a planned attack on public transportation, arresting three individuals with ties to Islamist extremist groups from North Africa."
+            },
+            {
+                title: "Italian Coast Guard Intercepts Boat with 200 Migrants from Libya",
+                source: "Corriere della Sera",
+                country: "italy",
+                countryName: "Italy",
+                time: "1 hour ago",
+                excerpt: "Another migrant vessel has been intercepted off the coast of Sicily, raising concerns about the effectiveness of EU border policies as numbers continue to surge."
+            },
+            {
+                title: "UK Deports 50 Foreign Criminals with Ties to African Gangs",
+                source: "The Telegraph",
+                country: "uk",
+                countryName: "United Kingdom",
+                time: "2 hours ago",
+                excerpt: "British authorities have successfully removed dozens of foreign nationals convicted of serious crimes, many linked to organized criminal networks operating from West Africa."
+            },
+            {
+                title: "Spanish Town Protests After Moroccan Migrants Accused of Sexual Assaults",
+                source: "El Mundo",
+                country: "spain",
+                countryName: "Spain",
+                time: "3 hours ago",
+                excerpt: "Thousands of residents in southern Spain demonstrate demanding stricter immigration controls following a series of violent incidents attributed to recent arrivals from Morocco."
+            },
+            {
+                title: "Dutch Parliament Debates Ban on Islamic Face Coverings in Public",
+                source: "De Telegraaf",
+                country: "netherlands",
+                countryName: "Netherlands",
+                time: "4 hours ago",
+                excerpt: "A controversial bill that would prohibit the wearing of burqas and niqabs in all public spaces faces heated debate in the Dutch parliament amid security concerns."
+            },
+            {
+                title: "Swedish Police Chief Admits 'No-Go Zones' Exist in Major Cities",
+                source: "Aftonbladet",
+                country: "sweden",
+                countryName: "Sweden",
+                time: "5 hours ago",
+                excerpt: "In a surprising admission, a senior police official confirms that certain immigrant-dominated areas have become effectively lawless, with emergency services unable to operate safely."
+            }
+        ];
+        
+        let newsItems = [...sampleNews];
+        let currentIndex = 0;
+        let lastNewsTime = new Date();
+        let storyCount = 0;
+        let incidentCount = 847293;
+        let activeCountry = 'all';
+        
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            
+            if (hours > 0) {
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function updateTimers() {
+            const now = new Date();
+            const timeDiff = Math.floor((now - lastNewsTime) / 1000);
+            document.getElementById('lastNewsTimer').textContent = formatTime(timeDiff);
+            
+            // Simulate incident counter increasing
+            if (Math.random() < 0.1) {
+                incidentCount += Math.floor(Math.random() * 3) + 1;
+                document.getElementById('incidentCounter').textContent = incidentCount.toLocaleString();
+            }
+        }
+        
+        function createNewsItem(news) {
+            return `
+                <article class="news-item" data-country="${news.country}">
+                    <h2 class="news-title">
+                        <a href="#" onclick="alert('In real implementation, this would link to the full article')">${news.title}</a>
+                    </h2>
+                    <div class="news-meta">
+                        <span class="news-source">${news.source}</span>
+                        <span class="news-country">${news.countryName}</span>
+                        <span class="news-time">${news.time}</span>
+                    </div>
+                    <p class="news-excerpt">${news.excerpt}</p>
+                </article>
+            `;
+        }
+        
+        function filterNewsByCountry(country) {
+            const allNewsItems = document.querySelectorAll('.news-item');
+            allNewsItems.forEach(item => {
+                if (country === 'all' || item.dataset.country === country) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        function updateSiteTitle(title) {
+            document.getElementById('siteTitle').textContent = title;
+            document.title = title;
+        }
+		
+		function updateSubtitle(text) {
+			const subtitleEl = document.getElementById('siteSubtitle');
+			if (subtitleEl && typeof text === 'string' && text.trim().length > 0) {
+				subtitleEl.textContent = text;
+			}
+        }
+        
+        function loadInitialNews() {
+            const feed = document.getElementById('newsFeed');
+            const initialBatch = newsItems.slice(0, 6);
+            
+            initialBatch.forEach(news => {
+                feed.innerHTML += createNewsItem(news);
+                storyCount++;
+            });
+            
+            currentIndex = 6;
+            document.getElementById('storyCounter').textContent = storyCount;
+        }
+        
+        function loadMoreNews() {
+            if (currentIndex >= newsItems.length) {
+                return;
+            }
+            
+            const feed = document.getElementById('newsFeed');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            
+            loadingIndicator.style.display = 'block';
+            
+            setTimeout(() => {
+                const nextBatch = newsItems.slice(currentIndex, currentIndex + 3);
+                nextBatch.forEach(news => {
+                    feed.innerHTML += createNewsItem(news);
+                    storyCount++;
+                });
+                
+                currentIndex += 3;
+                document.getElementById('storyCounter').textContent = storyCount;
+                loadingIndicator.style.display = 'none';
+                
+                // Apply current filter
+                filterNewsByCountry(activeCountry);
+                
+                lastNewsTime = new Date();
+            }, 1000);
+        }
+        
+        // Function to fetch real news (mock implementation for demo)
+        async function fetchRealNews(country) {
+            // In a real implementation, this would fetch from news APIs
+            const newsAPIs = {
+                uk: ["BBC", "The Guardian", "The Telegraph"],
+                france: ["Le Monde", "Le Figaro", "Liberation"],
+                germany: ["Der Spiegel", "Die Welt", "Süddeutsche Zeitung"],
+                spain: ["El País", "El Mundo", "ABC"],
+                italy: ["Corriere della Sera", "La Repubblica", "Il Sole 24 Ore"],
+                netherlands: ["De Telegraaf", "NRC Handelsblad", "Volkskrant"],
+                sweden: ["SVT", "Aftonbladet", "Dagens Nyheter"],
+                portugal: ["Público", "Diário de Notícias", "Observador"]
+            };
+            
+            const sources = newsAPIs[country] || ["Reuters", "AP", "AFP"];
+            const source = sources[Math.floor(Math.random() * sources.length)];
+            
+            return {
+                title: `Breaking: ${country.charAt(0).toUpperCase() + country.slice(1)} Implements New Security Measures`,
+                source: source,
+                country: country,
+                countryName: country.charAt(0).toUpperCase() + country.slice(1),
+                time: "Just now",
+                excerpt: `Authorities in ${country} have announced new measures to address security concerns. This is a demonstration of how real news would be aggregated from various sources.`
+            };
+        }
+        
+        function addNewNews() {
+            const countries = ["uk", "france", "germany", "spain", "italy", "netherlands", "sweden", "portugal"]; 
+            const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+            
+            fetchRealNews(randomCountry).then(newNews => {
+                const feed = document.getElementById('newsFeed');
+                feed.insertAdjacentHTML('afterbegin', createNewsItem(newNews));
+                storyCount++;
+                document.getElementById('storyCounter').textContent = storyCount;
+                
+                // Apply current filter
+                filterNewsByCountry(activeCountry);
+                
+                lastNewsTime = new Date();
+				updateHotspots();
+            });
+        }
+		
+		function aggregateCountryCounts() {
+			const counts = { uk: 0, france: 0, germany: 0, spain: 0, italy: 0, netherlands: 0, sweden: 0, portugal: 0 };
+			const allItems = document.querySelectorAll('.news-item');
+			allItems.forEach(item => {
+				const c = item.getAttribute('data-country');
+				if (c && counts.hasOwnProperty(c)) counts[c] += 1;
+			});
+			return counts;
+		}
+
+		function updateHotspots() {
+			const counts = aggregateCountryCounts();
+			const values = Object.values(counts);
+			const max = Math.max(1, ...values);
+			// Map country keys to ISO2 in SVG
+			const countryToISO = { uk: 'GB', france: 'FR', germany: 'DE', spain: 'ES', italy: 'IT', netherlands: 'NL', sweden: 'SE', portugal: 'PT' };
+			Object.entries(countryToISO).forEach(([key, iso]) => {
+				const el = document.querySelector(`#map svg #${iso}`);
+				if (!el) return;
+				const count = counts[key] || 0;
+				const t = max ? count / max : 0;
+				const r = 255;
+				const g = Math.round(240 - 200 * t);
+				const b = Math.round(240 - 200 * t);
+				el.style.fill = `rgb(${r},${g},${b})`;
+				el.setAttribute('data-count', String(count));
+				el.setAttribute('title', `${iso}: ${count}`);
+			});
+			const legendMin = document.getElementById('legendMin');
+			const legendMax = document.getElementById('legendMax');
+			if (legendMin) legendMin.textContent = '0';
+			if (legendMax) legendMax.textContent = String(max);
+        }
+        
+        function handleScroll() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+                loadMoreNews();
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInitialNews();
+            setInterval(updateTimers, 1000);
+            setInterval(addNewNews, Math.random() * 180000 + 120000);
+            window.addEventListener('scroll', handleScroll);
+            
+			// Initial counts color
+			fetchCountsAndColor();
+			
+			// Set initial subtitle from active filter if available
+			const activeFilter = document.querySelector('.country-filter.active');
+			if (activeFilter && activeFilter.dataset.subtitle) {
+				updateSubtitle(activeFilter.dataset.subtitle);
+			}
+            
+            // Country filter functionality
+            document.querySelectorAll('.country-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Remove active class from all filters
+                    document.querySelectorAll('.country-filter').forEach(f => f.classList.remove('active'));
+                    
+                    // Add active class to clicked filter
+                    this.classList.add('active');
+                    
+                    // Get selected country
+                    activeCountry = this.dataset.country;
+                    
+                    // Update site title
+                    updateSiteTitle(this.dataset.title);
+					// Update subtitle in selected language
+					if (this.dataset.subtitle) updateSubtitle(this.dataset.subtitle);
+                    
+                    // Load news from API and recolor
+                    loadNewsFromAPI(activeCountry).then(() => fetchCountsAndColor());
+                });
+            });
+            
+            // Add SVG country click -> filter
+            const isoToCountry = { GB: 'uk', FR: 'france', DE: 'germany', ES: 'spain', IT: 'italy', NL: 'netherlands', SE: 'sweden', PT: 'portugal' };
+            document.querySelectorAll('#map svg path[id]').forEach(p => {
+                const iso = p.id;
+                if (!isoToCountry[iso]) return;
+                p.addEventListener('click', () => {
+                    const filter = document.querySelector(`[data-country="${isoToCountry[iso]}"]`);
+                    if (filter) filter.click();
+                });
+            });
+            // Initial color
+            updateHotspots();
+        });
+    </script>
+</body>
+</html>
