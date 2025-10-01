@@ -484,127 +484,144 @@
     </div>
 
     <script>
-/** === Config === **/
-const API_BASE = "https://europe-wakes-up.onrender.com"; // backend en Render
-const countryKeyToISO = {
-  all: null, spain: "ES", uk: "GB", france: "FR",
-  germany: "DE", italy: "IT", netherlands: "NL",
-  sweden: "SE", portugal: "PT"
-};
-const isoToKey = { ES:'spain', GB:'uk', FR:'france', DE:'germany', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
-
-let activeCountry = 'all';
-let lastNewsTime = new Date();
-
-/** === Utilidades UI === **/
-function formatTime(seconds){
-  const h = Math.floor(seconds/3600), m = Math.floor((seconds%3600)/60), s = seconds%60;
-  return h>0 ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
-             : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
-function tickTimer(){
-  const secs = Math.floor((new Date()-lastNewsTime)/1000);
-  const el = document.getElementById('lastNewsTimer');
-  if (el) el.textContent = formatTime(secs);
-}
-
-/** === Render de noticias === **/
-function renderNews(items){
-  const feed = document.getElementById('newsFeed');
-  const fmt = (d)=> d ? new Date(d).toLocaleString() : '';
-  feed.innerHTML = (items||[]).map(a => `
-    <article class="news-item" data-country="${(isoToKey[a.country]||'all')}">
-      <h2 class="news-title">
-        <a href="${a.url}" target="_blank" rel="noopener">${a.title || '(untitled)'}</a>
-      </h2>
-      <div class="news-meta">
-        <span class="news-source">${a.source || a.domain || ''}</span>
-        ${a.country ? `<span class="news-country">${a.country}</span>` : ''}
-        <span class="news-time">${fmt(a.publishedAt)}</span>
-      </div>
-      ${a.summary ? `<p class="news-excerpt">${a.summary}</p>` : ''}
-    </article>
-  `).join('');
-  document.getElementById('storyCounter').textContent = (items||[]).length;
-  lastNewsTime = new Date();
-}
-
-/** === Llamadas API === **/
-async function loadNewsFromAPI(countryKey='all', q=''){
-  const iso = countryKeyToISO[countryKey] || '';
-  const params = new URLSearchParams();
-  if (iso) params.set('country', iso);
-  if (q) params.set('q', q);
-  const res = await fetch(`${API_BASE}/api/news?`+params.toString());
-  const items = await res.json();
-  renderNews(items);
-}
-
-function colorFor(count, max){
-  const t = max ? count/max : 0;           // 0..1
-  const r = 255;
-  const g = Math.round(240 - 200*t);
-  const b = Math.round(240 - 200*t);
-  return `rgb(${r},${g},${b})`;            // claro -> rojo
-}
-
-async function fetchCountsAndColor(){
-  const r = await fetch(`${API_BASE}/api/counts`);
-  const { counts = {}, lastUpdated } = await r.json();
-  const max = Math.max(1, ...Object.values(counts));
-
-  // colorear paths por id ISO2
-  document.querySelectorAll('#map svg path[id]').forEach(p => {
-    const iso = p.id.toUpperCase();
-    const c = counts[iso] || 0;
-    p.style.fill = colorFor(c, max);
-    p.setAttribute('data-count', String(c));
-    p.setAttribute('title', `${iso}: ${c}`);
-  });
-
-  const legendMax = document.getElementById('legendMax');
-  if (legendMax) legendMax.textContent = String(max);
-
-  const updatedEl = document.getElementById('updated');
-  if (updatedEl && lastUpdated) updatedEl.textContent = `Updated: ${new Date(lastUpdated).toLocaleString()}`;
-}
-
-/** === Wiring UI === **/
-function updateSiteTitle(title){ document.getElementById('siteTitle').textContent = title; document.title = title; }
-function updateSubtitle(text){ const el = document.getElementById('siteSubtitle'); if (el && text) el.textContent = text; }
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Botones de filtro por país
-  document.querySelectorAll('.country-filter').forEach(btn => {
-    btn.addEventListener('click', async function(){
-      document.querySelectorAll('.country-filter').forEach(f => f.classList.remove('active'));
-      this.classList.add('active');
-      activeCountry = this.dataset.country || 'all';
-      updateSiteTitle(this.dataset.title || 'EUROPE WAKES UP');
-      if (this.dataset.subtitle) updateSubtitle(this.dataset.subtitle);
-      await loadNewsFromAPI(activeCountry);
-      fetchCountsAndColor();
-    });
-  });
-
-  // Click en mapa → aplica filtro
-  const isoToCountry = { GB:'uk', FR:'france', DE:'germany', ES:'spain', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
-  document.querySelectorAll('#map svg path[id]').forEach(p=>{
-    const iso = p.id.toUpperCase();
-    const key = isoToCountry[iso];
-    if (!key) return;
-    p.addEventListener('click', () => {
-      const filter = document.querySelector(`.country-filter[data-country="${key}"]`);
-      if (filter) filter.click();
-    });
-  });
-
-  // Cargas iniciales
-  loadNewsFromAPI('all');     // Europa entera
-  fetchCountsAndColor();      // colorear mapa
-  setInterval(fetchCountsAndColor, 60_000); // refresca cada minuto
-  setInterval(tickTimer, 1000);             // cronómetro "last news"
-});
-</script>
+        /** === Config === **/
+        const API_BASE = "https://europe-wakes-up.onrender.com"; // backend en Render
+        const countryKeyToISO = {
+          all: null, spain: "ES", uk: "GB", france: "FR",
+          germany: "DE", italy: "IT", netherlands: "NL",
+          sweden: "SE", portugal: "PT"
+        };
+        const isoToKey = { ES:'spain', GB:'uk', FR:'france', DE:'germany', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
+        
+        let activeCountry = 'all';
+        let lastNewsTime = new Date();
+        let latestSeenTsByCountry = {};
+        
+        /** === Utilidades UI === **/
+        function updateLatestTimerFor(countryKey, items){
+          if (!Array.isArray(items) || items.length === 0) return;
+        
+          const newestTs = Math.max(...items.map(a => +new Date(a.publishedAt || 0)).filter(n => Number.isFinite(n)));
+          const prevTs = latestSeenTsByCountry[countryKey] || 0;
+        
+          if (Number.isFinite(newestTs) && newestTs > prevTs){
+            latestSeenTsByCountry[countryKey] = newestTs;
+            lastNewsTime = new Date(newestTs);
+          } else if (!prevTs && Number.isFinite(newestTs)) {
+            latestSeenTsByCountry[countryKey] = newestTs;
+            lastNewsTime = new Date(newestTs);
+          }
+        }
+                
+        function formatTime(seconds){
+          const h = Math.floor(seconds/3600), m = Math.floor((seconds%3600)/60), s = seconds%60;
+          return h>0 ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+                     : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+        function tickTimer(){
+          const secs = Math.floor((new Date()-lastNewsTime)/1000);
+          const el = document.getElementById('lastNewsTimer');
+          if (el) el.textContent = formatTime(secs);
+        }
+        
+        /** === Render de noticias === **/
+        function renderNews(items){
+          const feed = document.getElementById('newsFeed');
+          const fmt = (d)=> d ? new Date(d).toLocaleString() : '';
+          feed.innerHTML = (items||[]).map(a => `
+            <article class="news-item" data-country="${(isoToKey[a.country]||'all')}">
+              <h2 class="news-title">
+                <a href="${a.url}" target="_blank" rel="noopener">${a.title || '(untitled)'}</a>
+              </h2>
+              <div class="news-meta">
+                <span class="news-source">${a.source || a.domain || ''}</span>
+                ${a.country ? `<span class="news-country">${a.country}</span>` : ''}
+                <span class="news-time">${fmt(a.publishedAt)}</span>
+              </div>
+              ${a.summary ? `<p class="news-excerpt">${a.summary}</p>` : ''}
+            </article>
+          `).join('');
+          document.getElementById('storyCounter').textContent = (items||[]).length;
+          lastNewsTime = new Date();
+        }
+        
+        /** === Llamadas API === **/
+        async function loadNewsFromAPI(countryKey='all', q=''){
+          const iso = countryKeyToISO[countryKey] || '';
+          const params = new URLSearchParams();
+          if (iso) params.set('country', iso);
+          if (q) params.set('q', q);
+          const res = await fetch(`${API_BASE}/api/news?`+params.toString());
+          const items = await res.json();
+          updateLatestTimerFor(countryKey, items);
+          renderNews(items);
+        }
+        
+        function colorFor(count, max){
+          const t = max ? count/max : 0;           // 0..1
+          const r = 255;
+          const g = Math.round(240 - 200*t);
+          const b = Math.round(240 - 200*t);
+          return `rgb(${r},${g},${b})`;            // claro -> rojo
+        }
+        
+        async function fetchCountsAndColor(){
+          const r = await fetch(`${API_BASE}/api/counts`);
+          const { counts = {}, lastUpdated } = await r.json();
+          const max = Math.max(1, ...Object.values(counts));
+        
+          // colorear paths por id ISO2
+          document.querySelectorAll('#map svg path[id]').forEach(p => {
+            const iso = p.id.toUpperCase();
+            const c = counts[iso] || 0;
+            p.style.fill = colorFor(c, max);
+            p.setAttribute('data-count', String(c));
+            p.setAttribute('title', `${iso}: ${c}`);
+          });
+        
+          const legendMax = document.getElementById('legendMax');
+          if (legendMax) legendMax.textContent = String(max);
+        
+          const updatedEl = document.getElementById('updated');
+          if (updatedEl && lastUpdated) updatedEl.textContent = `Updated: ${new Date(lastUpdated).toLocaleString()}`;
+        }
+        
+        /** === Wiring UI === **/
+        function updateSiteTitle(title){ document.getElementById('siteTitle').textContent = title; document.title = title; }
+        function updateSubtitle(text){ const el = document.getElementById('siteSubtitle'); if (el && text) el.textContent = text; }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          // Botones de filtro por país
+          document.querySelectorAll('.country-filter').forEach(btn => {
+            btn.addEventListener('click', async function(){
+              document.querySelectorAll('.country-filter').forEach(f => f.classList.remove('active'));
+              this.classList.add('active');
+              activeCountry = this.dataset.country || 'all';
+              updateSiteTitle(this.dataset.title || 'EUROPE WAKES UP');
+              if (this.dataset.subtitle) updateSubtitle(this.dataset.subtitle);
+              await loadNewsFromAPI(activeCountry);
+              fetchCountsAndColor();
+            });
+          });
+        
+          // Click en mapa → aplica filtro
+          const isoToCountry = { GB:'uk', FR:'france', DE:'germany', ES:'spain', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
+          document.querySelectorAll('#map svg path[id]').forEach(p=>{
+            const iso = p.id.toUpperCase();
+            const key = isoToCountry[iso];
+            if (!key) return;
+            p.addEventListener('click', () => {
+              const filter = document.querySelector(`.country-filter[data-country="${key}"]`);
+              if (filter) filter.click();
+            });
+          });
+        
+          // Cargas iniciales
+          loadNewsFromAPI('all');     // Europa entera
+          fetchCountsAndColor();      // colorear mapa
+          setInterval(fetchCountsAndColor, 60_000); // refresca cada minuto
+          setInterval(tickTimer, 1000);             // cronómetro "last news"
+        });
+        </script>
 </body>
 </html>
