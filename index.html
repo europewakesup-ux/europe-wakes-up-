@@ -505,22 +505,38 @@
         const isoToKey = { ES:'spain', GB:'uk', FR:'france', DE:'germany', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
         
         let activeCountry = 'all';
-        let lastNewsTime = new Date(); // deprecated for display; kept for backwards compatibility
-        let latestPublishedAtMs = 0;
-        let latestSeenTsByCountry = {};
+        let lastNewsTime = new Date(); // legacy
+        const latestPublishedAtMsByCountry = {};
+ 
+        function toMs(dateLike) {
+            const d = new Date(dateLike);
+            const ms = d.getTime();
+            return Number.isFinite(ms) ? ms : 0;
+        }
+ 
+        function maybeResetTimerWithForCountry(countryKey, newMs) {
+            if (!countryKey) return;
+            const current = latestPublishedAtMsByCountry[countryKey] || 0;
+            if (newMs > current) latestPublishedAtMsByCountry[countryKey] = newMs;
+        }
+
+        function getActiveBaselineMs() {
+            const key = activeCountry || 'all';
+            return latestPublishedAtMsByCountry[key] || 0;
+        }
         
         /** === Utilidades UI === **/
         function updateLatestTimerFor(countryKey, items){
           if (!Array.isArray(items) || items.length === 0) return;
         
           const newestTs = Math.max(...items.map(a => +new Date(a.publishedAt || 0)).filter(n => Number.isFinite(n)));
-          const prevTs = latestSeenTsByCountry[countryKey] || 0;
+          const prevTs = latestPublishedAtMsByCountry[countryKey] || 0;
         
           if (Number.isFinite(newestTs) && newestTs > prevTs){
-            latestSeenTsByCountry[countryKey] = newestTs;
+            latestPublishedAtMsByCountry[countryKey] = newestTs;
             lastNewsTime = new Date(newestTs);
           } else if (!prevTs && Number.isFinite(newestTs)) {
-            latestSeenTsByCountry[countryKey] = newestTs;
+            latestPublishedAtMsByCountry[countryKey] = newestTs;
             lastNewsTime = new Date(newestTs);
           }
         }
