@@ -66,7 +66,6 @@ const RSS_SOURCES = {
   // SPAIN (ES)
   ES: [
     'https://e00-elmundo.uecdn.es/elmundo/rss/portada.xml',
-    'https://ep00.epimg.net/rss/elpais/portada.xml',
     'https://www.abc.es/rss/feeds/abcPortada.xml',
     'https://www.larazon.es/rss/portada.xml',
     'https://www.lavanguardia.com/rss/home.xml',
@@ -74,131 +73,215 @@ const RSS_SOURCES = {
     'https://www.eldiario.es/rss/',
     'https://www.elespanol.com/rss/',
     'https://www.elperiodico.com/es/rss/rss_portada.xml',
-    'https://www.rtve.es/api/rss/portada',
     'https://www.europapress.es/rss/rss.aspx',
     'https://www.publico.es/rss/publico/rss/',
     'https://okdiario.com/feed',
-    'https://www.huffingtonpost.es/feeds/index.xml',
     'https://www.infobae.com/espana/rss',
     'https://www.cope.es/rss/portada',
-    'https://cadenaser.com/rss/cadena_ser/portada.xml',
-    'https://www.lasexta.com/rss/2849-00001.xml',
-    'https://www.telemadrid.es/rss/portada.xml'
+    'https://www.vozpopuli.com/feed/',
+    'https://www.mediterraneodigital.com/rss/ultimas-noticias.feed?type=rss',
+    'https://www.alertadigital.com/feed/',
+    'https://www.periodistadigital.com/feed/',
+    'https://gaceta.es/feed/',
+    'https://www.esdiario.com/rss/portada',
+    'https://elcorreodeespana.com/rss',
+    'https://diariopatriota.com/feed/',
+    'https://casoaislado.com/feed/',
+    'https://ramblalibre.com/feed/',
+    'https://adelanteespana.com/feed/',
+    'https://infovaticana.com/feed/'
   ],
 
   // FRANCE (FR)
   FR: [
-    'https://www.lemonde.fr/rss/une.xml',
-    'https://www.lefigaro.fr/rss/figaro_actualites.xml',
-    'https://www.liberation.fr/arc/outboundfeeds/rss/',
-    'https://www.lepoint.fr/24h-infos/rss.xml',
-    'https://www.lexpress.fr/rss.xml',
-    'https://www.francetvinfo.fr/titres.rss',
-    'https://www.france24.com/fr/rss',
-    'https://www.leparisien.fr/arc/outboundfeeds/rss/',
-    'https://www.bfmtv.com/rss/',
-    'https://www.rfi.fr/fr/rss',
-    'https://www.marianne.net/rss.xml',
-    'https://www.valeursactuelles.com/feed',
-    'https://www.mediapart.fr/articles/feed',
-    'https://www.huffingtonpost.fr/feeds/index.xml',
-    'https://www.20minutes.fr/feeds/rss-une.xml'
+    'https://www.lemonde.fr/rss/une.xml',                       // Le Monde – portada
+    'https://www.lemonde.fr/international/rss_full.xml',        // Le Monde – internacional
+    'https://www.lemonde.fr/economie/rss_full.xml',             // Le Monde – economía
+    'https://www.lemonde.fr/politique/rss_full.xml',            // Le Monde – política
+    'https://www.lefigaro.fr/rss/figaro_actualites.xml',        // Le Figaro – actualidad
+    'https://www.liberation.fr/arc/outboundfeeds/rss-all/ ',    // Libération – noticias
+    'https://www.humanite.fr/rss.xml',                          // L’Humanité – izquierda
+    'https://www.lopinion.fr/rss.xml',                          // L’Opinion – liberal-conservador
+    'https://www.lesechos.fr/rss/rss_lesechos_a_la_une.xml',    // Les Échos – economía/finanzas
+    'https://www.france24.com/fr/france/rss',                   // France 24 – noticias Francia
+    'https://www.france24.com/fr/europe/rss',                   // France 24 – Europa
+    'https://www.france24.com/fr/info/rss',                     // France 24 – info general
+    'https://www.rfi.fr/fr/flux-rss',                           // RFI – internacional
+    'https://www.cnews.fr/flux-rss',                            // CNews – cobertura general
+    'https://www.lepoint.fr/24h-infos/rss.xml',                 // Le Point – noticias
+    'https://www.mediapart.fr/articles/feed',                   // Mediapart – investigación
+    'https://www.valeursactuelles.com/rss.xml',                 // Valeurs Actuelles – conservador/nacional
+    'https://www.marianne.net/rss',                             // Marianne – izquierda republicana
+    'https://www.slate.fr/rss.xml',                             // Slate France – actualidad/opinión
+    'https://www.nouvelobs.com/rss.xml'                         // L’Obs (Nouvel Observateur) – progresista
   ],
 
   // GERMANY (DE)
   DE: [
-    'https://www.tagesschau.de/index~rss2.xml',
-    'https://www.spiegel.de/international/index.rss',
-    'https://www.spiegel.de/schlagzeilen/tops/index.rss',
-    'https://www.zeit.de/index.xml',
-    'https://www.faz.net/rss/aktuell/',
-    'https://www.welt.de/feeds/topnews.rss',
-    'https://www.sueddeutsche.de/contentlayout/rss',
-    'https://www.bild.de/rssfeeds/rss-16725492,feed=bild.xml',
-    'https://www.handelsblatt.com/contentexport/feed/schlagzeilen',
-    'https://www.dw.com/rssfeed',
-    'https://www.t-online.de/rss'
+    'https://www.spiegel.de/schlagzeilen/tops/index.rss',        // Der Spiegel – titulares
+    'https://www.faz.net/rss/aktuell/',                          // FAZ – Frankfurter Allgemeine Zeitung
+    'https://www.sueddeutsche.de/news/rss',                      // Süddeutsche Zeitung – noticias
+    'https://www.welt.de/feeds/latest.rss',                      // Die Welt – noticias
+    'https://www.zeit.de/index.rss',                             // Die Zeit – portada
+    'https://www.handelsblatt.com/contentexport/feed/schlagzeilen', // Handelsblatt – economía
+    'https://www.focus.de/feeds/rss',                            // Focus Online – general
+    'https://www.tagesschau.de/xml/rss2',                        // Tagesschau (ARD) – noticias principales
+    'https://www.dw.com/atom/rss-de-top',                        // Deutsche Welle – noticias en alemán
+    'https://www.n-tv.de/rss',                                   // n-tv – general
+    'https://www.t-online.de/rss.xml',                           // t-online – portada
+    'https://www.heute.de/rss',                                  // ZDF Heute – noticias
+    'https://www.berliner-zeitung.de/feed',                      // Berliner Zeitung
+    'https://www.berliner-kurier.de/feed',                       // Berliner Kurier
+    'https://www.merkur.de/rssfeed.rdf',                         // Merkur – noticias
+    'https://www.fr.de/rssfeed.rdf',                             // Frankfurter Rundschau
+    'https://www.bild.de/rssfeeds/rssfeed-16725560,feed=alles.bild.html', // Bild – todo Bild
+    'https://jungefreiheit.de/feed/',                            // Junge Freiheit – conservador/derecha
+    'https://taz.de/!p4608;rss/',                                // taz – die tageszeitung (izquierda)
+    'https://www.neues-deutschland.de/rss.xml'                   // Neues Deutschland – izquierda
   ],
 
   // ITALY (IT)
   IT: [
-    'https://www.ansa.it/sito/ansait_rss.xml',
+    'https://www.corriere.it/rss/homepage.xml',
     'https://www.repubblica.it/rss/homepage/rss2.0.xml',
-    'https://xml2.corriereobjects.it/rss/homepage.xml',
     'https://www.lastampa.it/rss.xml',
+    'https://www.ilsole24ore.com/rss/ultimora.xml',
+    'https://www.ilgiornale.it/rss.xml',
     'https://www.ilfattoquotidiano.it/feed/',
-    'https://www.ilgiornale.it/feed.xml',
-    'https://www.ilmessaggero.it/rss/home.xml',
-    'https://www.iltempo.it/rss/home.xml',
-    'https://www.rainews.it/feeds/news.rss',
-    'https://www.adnkronos.com/rss/',
-    'https://www.huffingtonpost.it/feeds/index.xml',
-    'https://www.linkiesta.it/feed/'
+    'https://www.huffingtonpost.it/feed',
+    'https://www.liberoquotidiano.it/rss/home.xml',
+    'https://www.iltempo.it/rss.xml',
+    'https://www.affaritaliani.it/rss.xml',
+    'https://www.adnkronos.com/RSS_PrimaPagina.xml',
+    'https://www.ansa.it/sito/ansait_rss.xml',
+    'https://www.avvenire.it/RSSPages/AvvenireHomePage_RSS.xml',
+    'https://www.ilmanifesto.it/feed/',
+    'https://www.linkiesta.it/feed/',
+    'https://www.secoloditalia.it/feed/',
+    'https://www.lanazione.it/rss',
+    'https://www.gazzetta.it/rss/home.xml',
+    'https://www.quotidiano.net/rss',
+    'https://www.tpi.it/feed/'
   ],
 
   // UNITED KINGDOM (GB)
-  GB: [
-    'http://feeds.bbci.co.uk/news/rss.xml',
-    'https://www.theguardian.com/uk-news/rss',
-    'https://www.telegraph.co.uk/news/rss.xml',
-    'https://feeds.skynews.com/feeds/rss/home.xml',
+  UK: [
+    'https://www.theguardian.com/uk/rss',
+    'https://www.telegraph.co.uk/rss.xml',
     'https://www.independent.co.uk/news/uk/rss',
+    'https://www.thetimes.co.uk/environment/rss',
     'https://www.ft.com/?format=rss',
-    'https://www.dailymail.co.uk/news/index.rss',
-    'https://www.express.co.uk/posts/rss/1/news',
-    'https://www.thesun.co.uk/news/feed/',
+    'https://www.bbc.co.uk/news/10628494',
+    'https://www.dailymail.co.uk/home/index.rss',
+    'https://www.express.co.uk/posts/rss/1/uk',
+    'https://www.mirror.co.uk/?service=rss',
+    'https://metro.co.uk/feed/',
+    'https://news.sky.com/feeds/rss/home.xml',
     'https://www.standard.co.uk/rss',
+    'https://www.cityam.com/feed/',
+    'https://www.thesun.co.uk/feed/',
     'https://www.newstatesman.com/feed',
     'https://www.spectator.co.uk/feed',
-    'https://news.sky.com/uk/rss',
-    'https://www.gbnews.com/rss'
+    'https://www.politicshome.com/rss',
+    'https://www.theweek.co.uk/news/feed',
+    'https://www.channel4.com/news/rss',
+    'https://www.itv.com/news/feed.rss'
   ],
 
   // NETHERLANDS (NL)
-  NL: [
-    'https://feeds.nos.nl/nosnieuwsalgemeen',
-    'https://www.nu.nl/rss/Algemeen',
-    'https://www.telegraaf.nl/rss',
-    'https://www.nrc.nl/rss/',
-    'https://www.volkskrant.nl/voorpagina/rss.xml',
-    'https://www.parool.nl/voorpagina/rss.xml',
-    'https://www.rtlnieuws.nl/service/rss',
-    'https://www.trouw.nl/voorpagina/rss.xml',
-    'https://www.ad.nl/nieuws/rss.xml'
-  ],
+ NL: [
+  'https://www.nu.nl/rss/Algemeen',
+  'https://www.volkskrant.nl/nieuws/rss.xml',
+  'https://fd.nl/rss',
+  'https://www.telegraaf.nl/rss',
+  'https://www.trouw.nl/nieuws/rss.xml',
+  'https://www.parool.nl/nieuws/rss.xml',
+  'https://www.nrc.nl/rss/',
+  'https://www.ad.nl/rss.xml',
+  'https://www.rtlnieuws.nl/service/rss/nieuws/index.xml',
+  'https://nos.nl/rss',
+  'https://www.metronieuws.nl/rss.xml',
+  'https://www.omroepbrabant.nl/rss',
+  'https://www.rtvoost.nl/rss/nieuws',
+  'https://www.rtvutrecht.nl/rss/nieuws',
+  'https://www.rtvnoord.nl/rss/nieuws',
+  'https://www.rtvdrenthe.nl/rss/nieuws',
+  'https://www.omropfryslan.nl/rss/nieuws',
+  'https://www.gelderlander.nl/nieuws/rss.xml',
+  'https://www.bndestem.nl/nieuws/rss.xml',
+  'https://www.pzc.nl/nieuws/rss.xml'
+],
 
   // SWEDEN (SE)
   SE: [
-    'https://www.svt.se/nyheter/rss.xml',
-    'https://www.aftonbladet.se/nyheter/rss.xml',
-    'https://feeds.expressen.se/nyheter',
     'https://www.dn.se/rss/',
     'https://www.svd.se/?service=rss',
-    'https://www.gp.se/2.135/1.222.rss',
-    'https://www.sverigesradio.se/rss/nyheter',
-    'https://omni.se/rss'
+    'https://www.aftonbladet.se/nyheter/rss.xml',
+    'https://feeds.expressen.se/nyheter',
+    'https://feeds.svt.se/nyheter',
+    'https://sverigesradio.se/rssfeed.rss?programid=83',
+    'https://www.gp.se/2.718/1.43803-nyheter.rss',
+    'https://www.sydsvenskan.se/rss.xml',
+    'https://feeds.kristianstadsbladet.se/rss.xml',
+    'https://www.hd.se/rss.xml',
+    'https://www.bt.se/rss.xml',
+    'https://www.kvp.se/rss.xml',
+    'https://www.nsk.se/rss.xml',
+    'https://www.ystadsallehanda.se/rss.xml',
+    'https://www.trelleborgsallehanda.se/rss.xml',
+    'https://www.barometern.se/rss.xml',
+    'https://www.nt.se/rss.xml',
+    'https://www.corren.se/rss.xml',
+    'https://www.vk.se/rss.xml',
+    'https://www.norran.se/rss.xml'
   ],
 
   // NORWAY (NO)
   NO: [
     'https://www.nrk.no/toppsaker.rss',
-    'https://feeds.vg.no/vgartikkel',
+    'https://www.vg.no/rss/feed/',
+    'https://www.dagbladet.no/rss.xml',
     'https://www.aftenposten.no/rss',
-    'https://www.dagbladet.no/feed',
-    'https://www.tv2.no/rss',
-    'https://www.abcnyheter.no/node/feeds/rss',
-    'https://www.nettavisen.no/rss'
+    'https://www.dn.no/rss',
+    'https://www.abcnyheter.no/rss',
+    'https://www.tv2.no/rss/nyheter',
+    'https://www.nettavisen.no/rss',
+    'https://www.adressa.no/?service=rss',
+    'https://www.bt.no/rss',
+    'https://www.fvn.no/rss',
+    'https://www.nationen.no/rss',
+    'https://www.klassekampen.no/rss',
+    'https://www.vl.no/rss',
+    'https://www.ba.no/?service=rss',
+    'https://www.itromso.no/rss',
+    'https://www.nrk.no/urix.rss',
+    'https://www.nrk.no/sport.rss',
+    'https://www.hegnar.no/rss',
+    'https://e24.no/rss'
   ],
 
   // PORTUGAL (PT)
   PT: [
     'https://www.publico.pt/rss',
-    'https://expresso.pt/api/feed',
+    'https://www.dn.pt/rss',
+    'https://www.jn.pt/rss',
+    'https://expresso.pt/rss',
     'https://observador.pt/feed/',
-    'https://www.rtp.pt/rss/',
-    'https://sicnoticias.pt/feed/',
-    'https://feeds.feedburner.com/correiodamanha-ultimas',
-    'https://www.jn.pt/rss/'
+    'https://sicnoticias.pt/rss',
+    'https://rr.sapo.pt/rss/rssFeed.aspx?section=noticias',
+    'https://sol.sapo.pt/rss',
+    'https://www.cmjornal.pt/rss',
+    'https://www.iol.pt/rss/',
+    'https://eco.sapo.pt/feed/',
+    'https://www.tsf.pt/rss',
+    'https://www.rtp.pt/noticias/rss',
+    'https://www.ojogo.pt/rss',
+    'https://visao.pt/feed/',
+    'https://expresso.pt/economia/rss',
+    'https://www.dinheirovivo.pt/rss',
+    'https://www.abrilabril.pt/rss',
+    'https://www.noticiasaominuto.com/rss/ultima-hora',
+    'https://zap.aeiou.pt/feed'
   ],
 
   // AUSTRIA (AT)
