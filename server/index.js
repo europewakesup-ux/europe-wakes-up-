@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import Parser from 'rss-parser';
-import { KEYWORDS_ALL } from './keywords.js';
+import { KEYWORDS_ALL_FLAT as KEYWORDS_ALL } from './keywords.js';
 
 // --- Filtro local por keywords ---
 // Devuelve true si el título o el resumen contienen alguna keyword.
