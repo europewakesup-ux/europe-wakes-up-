@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import Parser from 'rss-parser';
-import { KEYWORDS_ALL_FLAT as KEYWORDS_ALL } from './keywords.js';
+import { KEYWORDS_ALL_FLAT as KEYWORDS_ALL, KEYWORDS } from './keywords.js';
 
 // --- Filtro local por keywords ---
 // Devuelve true si el título o el resumen contienen alguna keyword.
@@ -13,6 +13,35 @@ function matchesAnyKeyword(article) {
     if (!k) return false;
     return haystack.includes(String(k).toLowerCase());
   });
+}
+
+function norm(s='') {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '');
+}
+
+function containsAny(text, list) {
+  if (!Array.isArray(list) || !list.length) return false;
+  const t = norm(text || '');
+  return list.some(w => t.includes(norm(String(w))));
+}
+
+function matchesAnyKeyword(article) {
+  const positiveText = `${article.title || ''} ${article.summary || ''}`;
+
+  const hasCrime =
+    containsAny(positiveText, KEYWORDS?.ES?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.FR?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.DE?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.IT?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.NL?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.SE?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.NO?.CRIMES || []) ||
+    containsAny(positiveText, KEYWORDS?.PT?.CRIMES || []);
+
+  return !!hasCrime;
 }
 
 const app = express();
