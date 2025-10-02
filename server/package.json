@@ -1,17 +1,24 @@
 {
-  "name": "europe-wakes-up-server",
+  "name": "europe-wakes-up",
   "version": "1.0.0",
-  "private": true,
   "type": "module",
+  "description": "News scraping + Europe map project",
+  "main": "server/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "NODE_ENV=development node index.js"
+    "start": "node --env-file=server/.env server/index.js",
+    "dev": "nodemon --env-file=server/.env server/index.js"
   },
+  "keywords": [],
+  "author": "Alvaro",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
