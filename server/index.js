@@ -382,6 +382,53 @@ app.get('/api/news', (req, res) => {
   res.json(items.slice(0, 200));
 });
 
+// SOLO PARA DIAGNÓSTICO: devuelve noticias sin filtrar por keywords (RSS + NewsAPI)
+app.get('/api/news-unfiltered', async (req, res) => {
+  const country = (req.query.country || '').toString().toUpperCase();
+
+  // versión sin filtro: clon simple de fetchCountry
+  async function fetchCountryUnfiltered(countryISO) {
+    const feeds = RSS_SOURCES[countryISO] || [];
+    const items = [];
+
+    for (const feedUrl of feeds) {
+      try {
+        const feed = await parser.parseURL(feedUrl);
+        for (const it of feed.items || []) {
+          const art = normalizeArticle(it, countryISO);
+          if (!art.country) {
+            let domain = '';
+            try { domain = new URL(art.url).hostname.replace(/^www\./,''); } catch {}
+            art.country = DOMAIN_TO_ISO[domain] || countryISO || null;
+          }
+          items.push(art); // SIN matchesAnyKeyword
+        }
+      } catch {}
+    }
+
+    // + NewsAPI (si hay KEY)
+    const api = await fetchFromNewsAPI(countryISO);
+    return dedupe([...items, ...api]).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+  }
+
+  try {
+    if (country && country !== 'ALL') {
+      const list = await fetchCountryUnfiltered(country);
+      res.json(list.slice(0,200));
+    } else {
+      // todas
+      const all = [];
+      for (const iso of Object.keys(RSS_SOURCES)) {
+        const list = await fetchCountryUnfiltered(iso);
+        all.push(...list);
+      }
+      res.json(dedupe(all).slice(0,200));
+    }
+  } catch (e) {
+    res.status(500).json({error:'debug failed', message: String(e)});
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
