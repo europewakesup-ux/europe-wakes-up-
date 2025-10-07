@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EUROPE WAKES UP</title>
+    <title>INTELLIGENCE OPERATIONS - CLASSIFIED</title>
     <style>
         * {
             margin: 0;
@@ -12,176 +12,220 @@
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            line-height: 1.5;
+            font-family: 'Courier New', monospace;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.4;
             overflow-x: hidden;
+        }
+        
+        .corner-brackets {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .corner-brackets::before,
+        .corner-brackets::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #333;
+        }
+        
+        .corner-brackets::before {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-brackets::after {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .corner-brackets-bottom::before {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-brackets-bottom::after {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
         }
         
         .header {
             text-align: center;
-            padding: 80px 40px 60px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #e5e5e5;
+            padding: 40px 20px 30px;
+            background-color: #0a0a0a;
+            border-bottom: 1px solid #1a1a1a;
+            position: relative;
         }
         
-		.brand-icon {
-			width: 18px;
-			height: 18px;
-			margin: 0 auto 12px;
-			color: #000000;
-		}
+        .classified-banner {
+            color: #ff0000;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
         
         .main-title {
-            font-size: 4rem;
-            font-weight: 300;
-            color: #000000;
-            margin-bottom: 20px;
-            letter-spacing: -2px;
-            line-height: 1.1;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
         }
         
         .subtitle {
-            font-size: 1.1rem;
-            color: #666666;
-            font-weight: 400;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
+            font-size: 0.9rem;
+            color: #666;
+            letter-spacing: 2px;
         }
-		
-		/* Merch image support for real images */
-		.merch-image img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			display: block;
+        
+        .timestamp {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 10px;
+            letter-spacing: 1px;
         }
         
         .country-selector {
-            max-width: 1200px;
-            margin: 40px auto;
+            max-width: 1400px;
+            margin: 20px auto;
             padding: 0 40px;
+            border-left: 2px solid #1a1a1a;
+            border-right: 2px solid #1a1a1a;
         }
         
         .selector-title {
-            font-size: 0.9rem;
-            color: #666666;
-            margin-bottom: 20px;
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
+            letter-spacing: 2px;
         }
         
         .country-filters {
             display: flex;
-            gap: 12px;
+            gap: 5px;
             flex-wrap: wrap;
             align-items: center;
         }
         
         .country-filter {
-    padding: 12px 16px;  /* Reduce padding */
-    border: none;  /* Remove border */
-    background-color: transparent;  /* Remove background */
-    color: #666666;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    font-weight: 700;  /* Make bold */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+            padding: 8px 16px;
+            border: 1px solid #1a1a1a;
+            background-color: #0f0f0f;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.75rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Courier New', monospace;
+        }
 
-.country-filter:hover {
-    color: #000000;
-}
+        .country-filter:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
 
-.country-filter.active {
-    background-color: transparent;  /* Keep transparent */
-    color: #000000;
-    border-bottom: 2px solid #000000;  /* Optional: underline for active state */
-}
-		.country-filters {
-    display: flex;
-    gap: 8px;  /* Reduce gap between items */
-    flex-wrap: nowrap;  /* Force single line */
-    align-items: center;
-    overflow-x: auto;  /* Allow horizontal scroll on mobile if needed */
-}
+        .country-filter.active {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-color: #ffffff;
+        }
         
         .main-container {
             display: flex;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 60px 40px;
-            gap: 60px;
+            padding: 30px 40px;
+            gap: 30px;
         }
         
         .sidebar-left {
-            width: 200px;
+            width: 280px;
             flex-shrink: 0;
             position: sticky;
             top: 20px;
             align-self: flex-start;
             height: fit-content;
-        }
-        
-        .merchandise {
-            margin-bottom: 40px;
-        }
-        
-        .merch-title {
-            font-size: 0.9rem;
-            color: #000000;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-        
-        .merch-item {
-            display: block;
-            margin-bottom: 16px;
+            border: 1px solid #1a1a1a;
+            background: #0a0a0a;
             padding: 20px;
-            border: 1px solid #e5e5e5;
-            background: #ffffff;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            text-align: center;
         }
         
-        .merch-item:hover {
-            border-color: #000000;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        
-        .merch-image {
-            width: 100%;
-            height: 120px;
-            background-color: #f5f5f5;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .panel-title {
             font-size: 0.8rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 10px;
+        }
+        
+        .agent-info {
+            margin-bottom: 30px;
+        }
+        
+        .agent-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.75rem;
             color: #666;
         }
         
-        .merch-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #000000;
-            margin-bottom: 4px;
+        .agent-detail .label {
+            color: #888;
         }
         
-        .merch-price {
-            font-size: 0.8rem;
-            color: #666666;
+        .agent-detail .value {
+            color: #ffffff;
+        }
+        
+        .activity-stats {
+            margin-bottom: 30px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #0f0f0f;
+            border-left: 2px solid #1a1a1a;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        
+        .risk-indicator {
+            margin-top: 5px;
+            font-size: 0.7rem;
+            color: #ff0000;
         }
         
         .news-feed {
@@ -190,29 +234,43 @@
         }
         
         .news-item {
-            border-bottom: 1px solid #e5e5e5;
-            margin-bottom: 40px;
-            padding-bottom: 40px;
+            border: 1px solid #1a1a1a;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #0f0f0f;
             transition: all 0.3s ease;
-            animation: fadeIn 0.6s ease-out;
+            position: relative;
+        }
+        
+        .news-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: #ffffff;
         }
         
         .news-item:hover {
-            transform: translateY(-2px);
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .mission-code {
+            font-size: 0.7rem;
+            color: #ff0000;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
         }
         
         .news-title {
-            font-size: 1.5rem;
-            color: #000000;
-            margin-bottom: 12px;
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 10px;
             line-height: 1.3;
             font-weight: 400;
-            letter-spacing: -0.5px;
+            letter-spacing: 0.5px;
         }
         
         .news-title a {
@@ -222,70 +280,43 @@
         }
         
         .news-title a:hover {
-            color: #666666;
+            color: #cccccc;
         }
         
         .news-meta {
             display: flex;
-            gap: 20px;
-            font-size: 0.8rem;
-            color: #666666;
-            margin-bottom: 16px;
+            gap: 15px;
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 500;
+            letter-spacing: 1px;
         }
         
         .news-source {
-            color: #000000;
-        }
-        
-        /* Contenedor para poder posicionar el enlace “(more)/(más)” */
-        .news-excerpt-wrap {
-            position: relative;
-        }
-
-        /* Resumen limitado a ~8 líneas */
-        .news-excerpt {
-            color: #333333;
-            font-size: 1rem;
-            line-height: 1.6;
-            font-weight: 400;
-
-            display: -webkit-box;
-            -webkit-line-clamp: 8;       /* ← límite de 8 líneas */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-
-            /* deja espacio a la derecha para el botón */
-            padding-right: 56px;
-        }
-
-        /* Enlace “(more)/(más)” pegado abajo a la derecha */
-        .excerpt-more {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-
-            /* degradado para que se lea bien sobre el texto clamped */
-            background: linear-gradient(to right, rgba(255,255,255,0), #fff 40%);
-            padding-left: 8px;
-
             color: #888;
-            font-size: 0.95rem;
-            text-decoration: none;
         }
-        .excerpt-more:hover { color: #000; }
         
-        .more-label {
-            color: #9aa0a6;
-            font-size: 0.9rem;
-            margin-top: 6px;
-            display: inline-block;
+        .news-excerpt {
+            color: #999;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .view-details {
+            color: #ffffff;
+            font-size: 0.75rem;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        
+        .view-details:hover {
+            color: #cccccc;
         }
         
         .sidebar-right {
-            width: 220px;
+            width: 280px;
             flex-shrink: 0;
             position: sticky;
             top: 20px;
@@ -293,113 +324,142 @@
             height: fit-content;
         }
         
-        .stats-container {
-            margin-bottom: 40px;
+        .stats-panel {
+            border: 1px solid #1a1a1a;
+            background: #0a0a0a;
+            padding: 20px;
+            margin-bottom: 20px;
         }
         
         .stat-item {
-            margin-bottom: 32px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-item:last-child {
+            margin-bottom: 0;
         }
         
         .stat-label {
-            font-size: 0.8rem;
-            color: #666666;
+            font-size: 0.7rem;
+            color: #666;
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 500;
         }
         
         .stat-value {
-            font-size: 2.2rem;
-            color: #000000;
+            font-size: 2rem;
+            color: #ffffff;
             font-weight: 300;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-            letter-spacing: -1px;
+            font-family: 'Courier New', monospace;
         }
         
-        .timer-value {
-            color: #000000;
-        }
-        
-        .europe-map {
-            margin-top: 40px;
+        .map-panel {
+            border: 1px solid #1a1a1a;
+            background: #0a0a0a;
+            padding: 20px;
         }
         
         .map-title {
-            font-size: 0.8rem;
-            color: #666666;
-            margin-bottom: 20px;
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 500;
         }
         
         #map {
             width: 100%;
-            max-width: 220px;
-            border: 1px solid #e5e5e5;
-            background: #fafafa;
+            border: 1px solid #1a1a1a;
+            background: #0a0a0a;
             overflow: hidden;
         }
+        
         #map svg {
             display: block;
             width: 100%;
             height: auto;
         }
+        
         #map svg path {
-            fill: #f0f0f0;
-            stroke: #cccccc;
+            fill: #1a1a1a;
+            stroke: #333;
             stroke-width: 0.5;
             cursor: pointer;
-            transition: fill 0.2s ease, opacity 0.2s ease;
+            transition: all 0.2s ease;
         }
+        
         #map svg path:hover {
-            opacity: 0.9;
+            fill: #ffffff;
+            stroke: #ffffff;
         }
+        
         .map-legend {
-            margin-top: 8px;
-            font-size: 0.75rem;
-            color: #666666;
+            margin-top: 10px;
+            font-size: 0.7rem;
+            color: #666;
             display: flex;
             align-items: center;
             gap: 8px;
         }
+        
         .legend-bar {
             flex: 1;
-            height: 8px;
-            background: linear-gradient(90deg, rgb(255,240,240), rgb(255,0,0));
-            border: 1px solid #e5e5e5;
+            height: 6px;
+            background: linear-gradient(90deg, #1a1a1a, #ffffff);
+            border: 1px solid #333;
         }
         
         .loading-indicator {
             text-align: center;
-            padding: 60px;
-            color: #666666;
-            font-style: italic;
-            font-size: 0.9rem;
+            padding: 40px;
+            color: #666;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
         }
         
         .loading-spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 1px solid #e5e5e5;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #1a1a1a;
             border-radius: 50%;
-            border-top-color: #000000;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 12px;
+            border-top-color: #ffffff;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(255, 255, 255, 0.01) 50%,
+                transparent 100%
+            );
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+            z-index: 999;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
-                padding: 40px 20px;
-                gap: 40px;
+                padding: 20px;
+                gap: 20px;
             }
             
             .sidebar-left, .sidebar-right {
@@ -408,70 +468,81 @@
             }
             
             .main-title {
-                font-size: 2.5rem;
-            }
-            
-            .country-selector {
-                padding: 0 20px;
-            }
-            
-            .merchandise {
-                display: flex;
-                gap: 16px;
-            }
-            
-            .merch-item {
-                flex: 1;
-            }
-            
-            #map {
-                width: 100%;
-                height: 200px;
-                max-width: none;
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="corner-brackets"></div>
+    <div class="corner-brackets corner-brackets-bottom"></div>
+    <div class="scanline"></div>
+    
     <div class="header">
-		<div class="brand-icon" aria-hidden="true">
-			<svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-				<line x1="12" y1="4" x2="12" y2="20" stroke="currentColor" stroke-width="2"/>
-				<line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2"/>
-			</svg>
-		</div>
-        <h1 class="main-title" id="siteTitle">EUROPE WAKES UP</h1>
-		<p class="subtitle" id="siteSubtitle">United as One Against the Silent War</p>
+        <div class="classified-banner">// CLASSIFIED - TOP SECRET //</div>
+        <h1 class="main-title" id="siteTitle">INTELLIGENCE OPERATIONS</h1>
+        <p class="subtitle" id="siteSubtitle">REAL-TIME SURVEILLANCE NETWORK</p>
+        <div class="timestamp">LAST UPDATE <span id="currentTime">05/06/2025 20:00</span></div>
     </div>
     
     <div class="country-selector">
-        <div class="selector-title">Filter by Country</div>
+        <div class="selector-title">» FILTER BY REGION</div>
         <div class="country-filters">
-			<div class="country-filter active" data-country="all" data-title="EUROPE WAKES UP" data-subtitle="United as One Against the Silent War">All Europe</div>
-			<div class="country-filter" data-country="spain" data-title="España, despierta" data-subtitle="Unidos como Uno contra la Guerra Silenciosa">Spain</div>
-			<div class="country-filter" data-country="uk" data-title="England, Wake Up" data-subtitle="United as One Against the Silent War">United Kingdom</div>
-			<div class="country-filter" data-country="france" data-title="France, Réveille-toi" data-subtitle="Unis como Un contre la Guerre Silencieuse">France</div>
-			<div class="country-filter" data-country="germany" data-title="Deutschland, Wach Auf" data-subtitle="Vereint als Eins gegen den Stillen Krieg">Germany</div>
-			<div class="country-filter" data-country="italy" data-title="Italia, Svegliati" data-subtitle="Uniti come Uno contro la Guerra Silenziosa">Italy</div>
-			<div class="country-filter" data-country="netherlands" data-title="Nederland, Ontwaak" data-subtitle="Verenigd als Eén tegen de Stille Oorlog">Netherlands</div>
-			<div class="country-filter" data-country="sweden" data-title="Sverige, Vakna" data-subtitle="Förenade som En mot det Tysta Kriget">Sweden</div>
-			<div class="country-filter" data-country="portugal" data-title="Portugal, Acorda" data-subtitle="Unidos como Um contra a Guerra Silenciosa">Portugal</div>
+            <div class="country-filter active" data-country="all" data-title="INTELLIGENCE OPERATIONS" data-subtitle="REAL-TIME SURVEILLANCE NETWORK">ALL REGIONS</div>
+            <div class="country-filter" data-country="spain" data-title="OPERACIONES - ESPAÑA" data-subtitle="RED DE VIGILANCIA EN TIEMPO REAL">SPAIN</div>
+            <div class="country-filter" data-country="uk" data-title="OPERATIONS - UK" data-subtitle="REAL-TIME SURVEILLANCE NETWORK">UK</div>
+            <div class="country-filter" data-country="france" data-title="OPÉRATIONS - FRANCE" data-subtitle="RÉSEAU DE SURVEILLANCE EN TEMPS RÉEL">FRANCE</div>
+            <div class="country-filter" data-country="germany" data-title="OPERATIONEN - DEUTSCHLAND" data-subtitle="ECHTZEIT-ÜBERWACHUNGSNETZ">GERMANY</div>
+            <div class="country-filter" data-country="italy" data-title="OPERAZIONI - ITALIA" data-subtitle="RETE DI SORVEGLIANZA IN TEMPO REALE">ITALY</div>
+            <div class="country-filter" data-country="netherlands" data-title="OPERATIES - NEDERLAND" data-subtitle="REALTIME BEWAKINGSNETWERK">NETHERLANDS</div>
+            <div class="country-filter" data-country="sweden" data-title="OPERATIONER - SVERIGE" data-subtitle="REALTIDSÖVERVAKNINGSNÄTVERK">SWEDEN</div>
+            <div class="country-filter" data-country="portugal" data-title="OPERAÇÕES - PORTUGAL" data-subtitle="REDE DE VIGILÂNCIA EM TEMPO REAL">PORTUGAL</div>
         </div>
     </div>
     
     <div class="main-container">
         <aside class="sidebar-left">
-            <div class="merchandise">
-                <h3 class="merch-title">Support the Cause</h3>
-                <div class="merch-item" onclick="alert('Security First Hoodie - would redirect to shop')">
-					<div class="merch-image"><img id="hoodieImage" src="assets/hoodie.png" alt="EUROPE WAKES UP Hoodie" /></div>
-                    <div class="merch-name">Security First Hoodie</div>
-                    <div class="merch-price">€45</div>
+            <div class="panel-title">// AGENT DETAILS</div>
+            
+            <div class="agent-info">
+                <div class="agent-detail">
+                    <span class="label">» AGENT ID:</span>
+                    <span class="value">009X3312</span>
                 </div>
-                <div class="merch-item" onclick="alert('Border Control Tee - would redirect to shop')">
-					<div class="merch-image"><img id="teeImage" src="assets/tee.png" alt="EUROPE WAKES UP T-Shirt" /></div>
-                    <div class="merch-name">Border Control Tee</div>
-                    <div class="merch-price">€25</div>
+                <div class="agent-detail">
+                    <span class="label">» CODE NAME:</span>
+                    <span class="value">WHISTSPERIA</span>
+                </div>
+                <div class="agent-detail">
+                    <span class="label">» STATUS:</span>
+                    <span class="value">ACTIVE</span>
+                </div>
+                <div class="agent-detail">
+                    <span class="label">» CLEARANCE:</span>
+                    <span class="value">LEVEL 9</span>
+                </div>
+            </div>
+            
+            <div class="activity-stats">
+                <div class="panel-title">// ACTIVITY</div>
+                <div class="stat-row">
+                    <div>
+                        <div class="stat-label">TOTAL</div>
+                        <div class="stat-value">72</div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <div>
+                        <div class="stat-label">SUCCESS</div>
+                        <div class="stat-value">45</div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <div>
+                        <div class="stat-label">FAILED</div>
+                        <div class="stat-value">27</div>
+                        <div class="risk-indicator">HIGH RISK: 30</div>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -481,35 +552,32 @@
         </main>
         
         <aside class="sidebar-right">
-            <div class="stats-container">
+            <div class="stats-panel">
                 <div class="stat-item">
-                    <div class="stat-label">Time Since Last News</div>
-                    <div class="stat-value timer-value" id="lastNewsTimer">00:00</div>
+                    <div class="stat-label">LAST SIGNAL</div>
+                    <div class="stat-value" id="lastNewsTimer">00:00</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-label">Crime Incidents 2024</div>
-                    <div class="stat-value" id="incidentCounter">847,293</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Stories Today</div>
+                    <div class="stat-label">OPERATIONS (20)</div>
                     <div class="stat-value" id="storyCounter">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">INCIDENTS 2024</div>
+                    <div class="stat-value" id="incidentCounter">847,293</div>
                 </div>
             </div>
             
-            <div class="europe-map">
-                <div class="map-title">Stories by Country</div>
+            <div class="map-panel">
+                <div class="map-title">// REGIONAL ACTIVITY</div>
                 <div id="map">
-<?xml version="1.0"?><svg baseprofile="tiny" fill="#ececec" height="684" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".1" version="1.2" viewBox="0 0 1000 684" width="1000" xmlns="http://www.w3.org/2000/svg">
- <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
- </path>
- <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania">
- </path>
-</svg>
-				</div>
-				<div class="map-legend">
-					<span id="legendMin">0</span>
-					<div class="legend-bar"></div>
-					<span id="legendMax">0</span>
+                    <svg baseprofile="tiny" height="684" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" version="1.2" viewBox="0 0 1000 684" width="1000" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z" id="AL" name="Albania"></path>
+                    </svg>
+                </div>
+                <div class="map-legend">
+                    <span id="legendMin">0</span>
+                    <div class="legend-bar"></div>
+                    <span id="legendMax">0</span>
                 </div>
             </div>
         </aside>
@@ -517,173 +585,93 @@
     
     <div class="loading-indicator" id="loadingIndicator">
         <div class="loading-spinner"></div>
-        Loading more security news...
+        ACCESSING ENCRYPTED DATABASE...
     </div>
 
     <script>
-        /** === Config === **/
         const sampleNews = [
-            { title: "Security First: The Silent War Continues", url: "https://example.com/news/security-first", publishedAt: "2023-10-27T10:00:00Z", summary: "The ongoing security crisis in Europe continues to intensify. Authorities are urging citizens to remain vigilant and report suspicious activities.", country: "all", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Border Control: A New Era of Surveillance", url: "https://example.com/news/border-control", publishedAt: "2023-10-27T09:30:00Z", summary: "The European Union has implemented a comprehensive border control system to prevent unauthorized entry. This marks a significant shift in security measures.", country: "all", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "France: The Silent Revolution", url: "https://example.com/news/france-silent-revolution", publishedAt: "2023-10-27T09:00:00Z", summary: "France is undergoing a profound transformation in its security infrastructure. The government is prioritizing digital surveillance and real-time monitoring.", country: "france", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Germany: The Silent Awakening", url: "https://example.com/news/germany-silent-awakening", publishedAt: "2023-10-27T08:30:00Z", summary: "Germany is experiencing a surge in security threats. The government is implementing new measures to protect its citizens and infrastructure.", country: "germany", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Spain: The Silent Resistance", url: "https://example.com/news/spain-silent-resistance", publishedAt: "2023-10-27T08:00:00Z", summary: "Spain is facing a growing number of security incidents. The government is taking decisive action to maintain public safety.", country: "spain", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Italy: The Silent Struggle", url: "https://example.com/news/italy-silent-struggle", publishedAt: "2023-10-27T07:30:00Z", summary: "Italy is dealing with a complex security landscape. The government is implementing innovative solutions to combat threats.", country: "italy", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Netherlands: The Silent Shield", url: "https://example.com/news/netherlands-silent-shield", publishedAt: "2023-10-27T07:00:00Z", summary: "The Netherlands is strengthening its security measures. The government is investing in advanced technology and training.", country: "netherlands", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Sweden: The Silent Guardians", url: "https://example.com/news/sweden-silent-guardians", publishedAt: "2023-10-27T06:30:00Z", summary: "Sweden is preparing for a new era of security threats. The government is enhancing its defense capabilities.", country: "sweden", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "Portugal: The Silent Vigilance", url: "https://example.com/news/portugal-silent-vigilance", publishedAt: "2023-10-27T06:00:00Z", summary: "Portugal is strengthening its security measures. The government is implementing innovative solutions to protect its citizens.", country: "portugal", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
-            { title: "United Kingdom: The Silent Wake", url: "https://example.com/news/uk-silent-wake", publishedAt: "2023-10-27T05:30:00Z", summary: "The United Kingdom is facing a significant security challenge. The government is taking decisive action to protect its citizens and infrastructure.", country: "uk", source: "EUROPE WAKES UP", domain: "europewakesup.com" },
+            { title: "HIGH-VALUE TARGET IDENTIFIED IN EASTERN EUROPE", url: "#", publishedAt: "2025-10-07T10:00:00Z", summary: "Intelligence confirms tracking of priority target. Surveillance teams mobilized. Operation status: ACTIVE.", country: "all", source: "INTEL-ALPHA", domain: "classified", missionCode: "Omega" },
+            { title: "CYBERCRIME NETWORK INFILTRATION - SEOUL", url: "#", publishedAt: "2025-10-07T09:30:00Z", summary: "Deep cover agent successfully penetrated major cybercrime organization. Data extraction in progress.", country: "all", source: "CYBER-OPS", domain: "classified", missionCode: "n8va" },
+            { title: "COVERT EXTRACTION OPERATION - BERLIN", url: "#", publishedAt: "2025-10-07T09:00:00Z", summary: "Asset extraction completed successfully. Agent relocated to safe house. Debriefing scheduled.", country: "germany", source: "FIELD-OPS", domain: "classified", missionCode: "gh0stline" },
+            { title: "ILLEGAL ARMS TRADE INTERCEPTED - LIBYA", url: "#", publishedAt: "2025-10-07T08:30:00Z", summary: "Major weapons shipment seized. Multiple arrests made. Investigation ongoing.", country: "all", source: "TACTICAL", domain: "classified", missionCode: "51ienf1ra" },
+            { title: "ROGUE AGENT COMMUNICATIONS MONITORED", url: "#", publishedAt: "2025-10-07T08:00:00Z", summary: "Signals intelligence detected unauthorized transmissions. Counter-intelligence deployed.", country: "all", source: "SIGINT", domain: "classified", missionCode: "ii0nwing" },
         ];
+        
         let newsItems = [...sampleNews];
-        let currentIndex = 0;
         let lastNewsTime = new Date();
-        let storyCount = 0;
-        let incidentCount = 847293;
         let activeCountry = 'all';
-
-        // i18n for (more)/(más)
-        const MORE_LABEL = (document.documentElement.lang || '').toLowerCase().startsWith('es') ? '(más)' : '(more)';
-        const isoToKey = { GB: 'uk', FR: 'france', DE: 'germany', ES: 'spain', IT: 'italy', NL: 'netherlands', SE: 'sweden', PT: 'portugal' };
-        const countryKeyToISO = { uk: 'GB', france: 'FR', germany: 'DE', spain: 'ES', italy: 'IT', netherlands: 'NL', sweden: 'SE', portugal: 'PT', all: 'ALL' };
-        const API_BASE = "https://europe-wakes-up.onrender.com"; // backend en Render
-        let latestSeenTsByCountry = {}; // { all: ms, spain: ms, ... }
- 
-        function toMs(dateLike) {
-            const d = new Date(dateLike);
-            const ms = d.getTime();
-            return Number.isFinite(ms) ? ms : 0;
-        }
- 
-        function updateLatestTimerFor(countryKey, items){
-            if (!countryKey || !Array.isArray(items) || items.length === 0) return;
-            const newestTs = Math.max(
-                ...items.map(a => +new Date(a.publishedAt || 0)).filter(n => Number.isFinite(n))
-            );
-            const prevTs = latestSeenTsByCountry[countryKey] || 0;
-            if (Number.isFinite(newestTs) && (newestTs > prevTs || !prevTs)){
-                latestSeenTsByCountry[countryKey] = newestTs;
-                lastNewsTime = new Date(newestTs);
-            }
-        }
-                
-        function formatTime(seconds){
-          const h = Math.floor(seconds/3600), m = Math.floor((seconds%3600)/60), s = seconds%60;
-          return h>0 ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
-                     : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        }
-        function tickTimer(){
-          const secs = Math.floor((new Date()-lastNewsTime)/1000);
-          const el = document.getElementById('lastNewsTimer');
-          if (el) el.textContent = formatTime(secs);
+        
+        function updateTime() {
+            const now = new Date();
+            const formatted = now.toISOString().slice(0, 19).replace('T', ' ');
+            document.getElementById('currentTime').textContent = formatted;
         }
         
-        /** === Render de noticias === **/
-        function renderNews(items){
-          const feed = document.getElementById('newsFeed');
-          const fmt = (d)=> d ? new Date(d).toLocaleString() : '';
-          feed.innerHTML = (items||[]).map(a => `
-            <article class="news-item" data-country="${(isoToKey[a.country]||'all')}">
-              <h2 class="news-title">
-                <a href="${a.url}" target="_blank" rel="noopener">${a.title || '(untitled)'}</a>
-              </h2>
-              <div class="news-meta">
-                <span class="news-source">${a.source || a.domain || ''}</span>
-                ${a.country ? `<span class="news-country">${a.country}</span>` : ''}
-                <span class="news-time">${fmt(a.publishedAt)}</span>
-              </div>
-              ${a.summary ? `
-                <div class="news-excerpt-wrap">
-                  <p class="news-excerpt">${a.summary}</p>
-                  <a class="excerpt-more" href="${a.url}" target="_blank" rel="noopener">${MORE_LABEL}</a>
-                </div>
-              ` : ''}
-            </article>
-          `).join('');
-          document.getElementById('storyCounter').textContent = (items||[]).length;
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return h > 0 ? `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+                         : `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
         
-        /** === Llamadas API === **/
-        async function loadNewsFromAPI(countryKey='all', q=''){
-            const iso = countryKeyToISO[countryKey] || '';
-            const params = new URLSearchParams();
-            if (iso) params.set('country', iso);
-            if (q) params.set('q', q);
-
-            const res = await fetch(`${API_BASE}/api/news?` + params.toString());
-            const items = await res.json();
-
-            // Actualiza el timer SOLO si hay algo más nuevo
-            updateLatestTimerFor(countryKey, items);
-
-            // Render una sola vez
-            renderNews(items);
+        function tickTimer() {
+            const secs = Math.floor((new Date() - lastNewsTime) / 1000);
+            document.getElementById('lastNewsTimer').textContent = formatTime(secs);
         }
         
-        function colorFor(count, max){
-          const t = max ? count/max : 0;           // 0..1
-          const r = 255;
-          const g = Math.round(240 - 200*t);
-          const b = Math.round(240 - 200*t);
-          return `rgb(${r},${g},${b})`;            // claro -> rojo
+        function renderNews(items) {
+            const feed = document.getElementById('newsFeed');
+            const fmt = (d) => d ? new Date(d).toLocaleString() : '';
+            feed.innerHTML = (items || []).map(a => `
+                <article class="news-item">
+                    <div class="mission-code">// MISSION CODE: ${a.missionCode || 'CLASSIFIED'}</div>
+                    <h2 class="news-title">
+                        <a href="${a.url}" target="_blank" rel="noopener">${a.title || '(REDACTED)'}</a>
+                    </h2>
+                    <div class="news-meta">
+                        <span class="news-source">${a.source || 'UNKNOWN'}</span>
+                        ${a.country ? `<span class="news-country">${a.country.toUpperCase()}</span>` : ''}
+                        <span class="news-time">${fmt(a.publishedAt)}</span>
+                    </div>
+                    ${a.summary ? `<p class="news-excerpt">${a.summary}</p>` : ''}
+                    <a class="view-details" href="${a.url}" target="_blank" rel="noopener">» VIEW FULL REPORT</a>
+                </article>
+            `).join('');
+            document.getElementById('storyCounter').textContent = (items || []).length;
         }
         
-        async function fetchCountsAndColor(){
-          const r = await fetch(`${API_BASE}/api/counts`);
-          const { counts = {}, lastUpdated } = await r.json();
-          const max = Math.max(1, ...Object.values(counts));
-        
-          // colorear paths por id ISO2
-          document.querySelectorAll('#map svg path[id]').forEach(p => {
-            const iso = p.id.toUpperCase();
-            const c = counts[iso] || 0;
-            p.style.fill = colorFor(c, max);
-            p.setAttribute('data-count', String(c));
-            p.setAttribute('title', `${iso}: ${c}`);
-          });
-        
-          const legendMax = document.getElementById('legendMax');
-          if (legendMax) legendMax.textContent = String(max);
-        
-          const updatedEl = document.getElementById('updated');
-          if (updatedEl && lastUpdated) updatedEl.textContent = `Updated: ${new Date(lastUpdated).toLocaleString()}`;
+        function updateSiteTitle(title) {
+            document.getElementById('siteTitle').textContent = title;
+            document.title = title;
         }
         
-        /** === Wiring UI === **/
-        function updateSiteTitle(title){ document.getElementById('siteTitle').textContent = title; document.title = title; }
-        function updateSubtitle(text){ const el = document.getElementById('siteSubtitle'); if (el && text) el.textContent = text; }
+        function updateSubtitle(text) {
+            const el = document.getElementById('siteSubtitle');
+            if (el && text) el.textContent = text;
+        }
         
         document.addEventListener('DOMContentLoaded', () => {
-          // Botones de filtro por país
-          document.querySelectorAll('.country-filter').forEach(btn => {
-            btn.addEventListener('click', async function(){
-              document.querySelectorAll('.country-filter').forEach(f => f.classList.remove('active'));
-              this.classList.add('active');
-              activeCountry = this.dataset.country || 'all';
-              updateSiteTitle(this.dataset.title || 'EUROPE WAKES UP');
-              if (this.dataset.subtitle) updateSubtitle(this.dataset.subtitle);
-              await loadNewsFromAPI(activeCountry);
-              fetchCountsAndColor();
+            document.querySelectorAll('.country-filter').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.country-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    activeCountry = this.dataset.country || 'all';
+                    updateSiteTitle(this.dataset.title || 'INTELLIGENCE OPERATIONS');
+                    if (this.dataset.subtitle) updateSubtitle(this.dataset.subtitle);
+                    
+                    const filtered = activeCountry === 'all' 
+                        ? newsItems 
+                        : newsItems.filter(item => item.country === activeCountry);
+                    renderNews(filtered);
+                });
             });
-          });
-        
-          // Click en mapa → aplica filtro
-          const isoToCountry = { GB:'uk', FR:'france', DE:'germany', ES:'spain', IT:'italy', NL:'netherlands', SE:'sweden', PT:'portugal' };
-          document.querySelectorAll('#map svg path[id]').forEach(p=>{
-            const iso = p.id.toUpperCase();
-            const key = isoToCountry[iso];
-            if (!key) return;
-            p.addEventListener('click', () => {
-              const filter = document.querySelector(`.country-filter[data-country="${key}"]`);
-              if (filter) filter.click();
-            });
-          });
-        
-          // Cargas iniciales
-          loadNewsFromAPI('all').catch(() => {});
-          fetchCountsAndColor();      // colorear mapa
-          setInterval(fetchCountsAndColor, 60_000); // refresca cada minuto
-          setInterval(tickTimer, 1000);             // cronómetro "last news"
+            
+            renderNews(newsItems);
+            updateTime();
+            setInterval(updateTime, 1000);
+            setInterval(tickTimer, 1000);
         });
-        </script>
+    </script>
 </body>
 </html>
