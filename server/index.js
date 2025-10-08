@@ -19,10 +19,12 @@ function norm(s='') {
 
 function containsAny(text, list) {
   if (!Array.isArray(list) || !list.length) return false;
-  const t = norm(text || '');
-  return list.some(w => t.includes(norm(String(w))));
+  const t = ' ' + norm(text || '') + ' ';
+  return list.some(w => {
+    const pattern = new RegExp(`\\b${norm(w)}\\b`, 'i'); // palabra exacta
+    return pattern.test(t);
+  });
 }
-
 function matchesAnyKeyword(article, countryCode = 'ALL') {
   const title = (article.title || '').toLowerCase();
 
@@ -425,8 +427,9 @@ async function fetchFromRSS(countryISO) {
         }
 
         // --- FILTRO POR KEYWORDS AQUÍ ---
-        if (matchesAnyKeyword(art)) items.push(art);
-      }
+        if (art.country && matchesAnyKeyword(art, art.country)) {
+          items.push(art);
+        }
     } catch (e) {
       // opcional: log
       // console.warn(`RSS error for ${countryISO} ${feedUrl}:`, e.message);
