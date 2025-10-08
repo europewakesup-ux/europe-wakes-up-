@@ -3,29 +3,22 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import Parser from 'rss-parser';
-import { KEYWORDS_ALL_FLAT as KEYWORDS_ALL, KEYWORDS } from './keywords.js';
-import { matchesAnyKeyword, matchesKeywordsByCountry, getMatchStatistics } from './utils/matchesKeywords.js';
-
+import { KEYWORDS_ALL, KEYWORDS } from './keywords.js';
+import { matchesAnyKeyword } from './utils/matchesKeywords.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-
-// In-memory cache
 const cache = {
-  newsByCountry: new Map(), // ISO2 -> array of articles
-  counts: {}, // ISO2 -> number
+  newsByCountry: new Map(),
+  counts: {},
   lastUpdated: null
 };
 
-// Config
 const NEWSAPI_KEY = process.env.NEWSAPI_KEY || '';
 const PORT = process.env.PORT || 8787;
 const COUNTRIES = ['ES', 'FR', 'DE', 'IT', 'NL', 'SE', 'GB', 'PT', 'NO', 'AT'];
-// OUTLETS (RSS / XML feeds only). Grouped by ISO country code.
-// IMPORTANT: UK uses ISO2 "GB" to match your SVG IDs.
 
 const RSS_SOURCES = {
   // SPAIN (ES)
@@ -316,11 +309,16 @@ const DOMAIN_TO_ISO = {
   'kurier.at':'AT','oe24.at':'AT','nachrichten.at':'AT'
 };
 
+const DOMAIN_TO_ISO = {
+  'elmundo.es':'ES','abc.es':'ES','lavanguardia.com':'ES',
+  'lemonde.fr':'FR','spiegel.de':'DE','corriere.it':'IT',
+  'theguardian.com':'GB','nu.nl':'NL','dn.se':'SE',
+  'nrk.no':'NO','publico.pt':'PT','orf.at':'AT'
+};
+
 const parser = new Parser({
   requestOptions: {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; EuropeWakesUpBot/1.0; +https://europe-wakes-up.onrender.com)'
-    },
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Bot/1.0)' },
     timeout: 15000
   }
 });
@@ -329,48 +327,19 @@ function normalizeArticle(raw, fallbackISO) {
   const url = raw.link || raw.url || '';
   let domain = '';
   try { domain = new URL(url).hostname.replace(/^www\./, ''); } catch {}
+  
   const source = raw.source?.name || domain || 'Unknown';
-
-  // decide country
-  const mappedISO = DOMAIN_TO_ISO[domain];
-  const country = mappedISO || fallbackISO || null;
+  const country = DOMAIN_TO_ISO[domain] || fallbackISO || null;
 
   return {
     title: raw.title || '',
     url,
     source,
     publishedAt: raw.pubDate || raw.publishedAt || new Date().toISOString(),
-    summary: raw.contentSnippet || raw.description || raw.summary || '',
+    summary: raw.contentSnippet || raw.description || '',
     domain,
     country
   };
-}
-
-async function fetchFromNewsAPI(fallbackISO, q) {
-  if (!NEWSAPI_KEY) return [];
-  const query =
-    q && q.trim()
-      ? q
-      : (Array.isArray(KEYWORDS_ALL) && KEYWORDS_ALL.length
-          ? KEYWORDS_ALL.slice(0, 15).map(t => `"${t}"`).join(' OR ')
-          : 'Europe news');
-
-  try {
-    const resp = await axios.get('https://newsapi.org/v2/everything', {
-      params: {
-        q: query,
-        language: 'en',
-        sortBy: 'publishedAt',
-        pageSize: 50
-      },
-      headers: { 'X-Api-Key': NEWSAPI_KEY }
-    });
-    const articles = resp.data?.articles || [];
-    // Let normalizeArticle decide country via DOMAIN_TO_ISO; fallback to block ISO
-    return articles.map(a => normalizeArticle(a, fallbackISO));
-  } catch {
-    return [];
-  }
 }
 
 async function fetchFromRSS(countryISO) {
@@ -380,30 +349,18 @@ async function fetchFromRSS(countryISO) {
   for (const feedUrl of feeds) {
     try {
       const feed = await parser.parseURL(feedUrl);
-
       for (const it of feed.items || []) {
         const art = normalizeArticle(it, countryISO);
-
-        // Asignar país si no viene definido
-        if (!art.country) {
-          let domain = '';
-          try {
-            domain = new URL(art.url).hostname.replace(/^www\./, '');
-          } catch {}
-          art.country = DOMAIN_TO_ISO[domain] || countryISO || null;
-        }
-
-        // --- FILTRO POR KEYWORDS AQUÍ ---
-        if (art.country && matchesAnyKeyword(art, art.country)) {
+        if (!art.country) art.country = countryISO;
+        
+        if (matchesAnyKeyword(art, art.country)) {
           items.push(art);
         }
       }
-
     } catch (e) {
-      console.warn(`RSS error for ${countryISO} ${feedUrl}:`, e.message);
+      console.warn(`RSS error: ${feedUrl}:`, e.message);
     }
   }
-
   return items;
 }
 
@@ -420,105 +377,47 @@ function dedupe(articles) {
 }
 
 async function fetchCountry(countryISO) {
-  const [rss, api] = await Promise.all([
-    fetchFromRSS(countryISO),
-    fetchFromNewsAPI(countryISO)
-  ]);
-  const merged = dedupe([...rss, ...api]).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+  const rss = await fetchFromRSS(countryISO);
+  const merged = dedupe(rss).sort((a,b) => 
+    new Date(b.publishedAt) - new Date(a.publishedAt)
+  );
   cache.newsByCountry.set(countryISO, merged.slice(0, 200));
 }
 
 async function refreshAll() {
+  console.log('🔄 Refreshing...');
   await Promise.all(COUNTRIES.map(fetchCountry));
 
   const counts = {};
   for (const list of cache.newsByCountry.values()) {
     for (const a of list || []) {
-      if (!a.country) continue;
-      counts[a.country] = (counts[a.country] || 0) + 1;
+      if (a.country) counts[a.country] = (counts[a.country] || 0) + 1;
     }
   }
   cache.counts = counts;
   cache.lastUpdated = new Date().toISOString();
+  console.log('✅ Done:', counts);
 }
 
-// Initial load and schedule
-refreshAll().catch(()=>{});
-setInterval(refreshAll, 5 * 60 * 1000); // every 5 minutes
+refreshAll().catch(console.error);
+setInterval(refreshAll, 5 * 60 * 1000);
 
-// Endpoints
-app.get('/api/counts', (req, res) => {
-  res.json({ counts: cache.counts, lastUpdated: cache.lastUpdated });
-});
+app.get('/api/ping', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
+app.get('/api/counts', (_, res) => res.json({ counts: cache.counts, lastUpdated: cache.lastUpdated }));
 
 app.get('/api/news', (req, res) => {
-  const country = (req.query.country || '').toString().toUpperCase();
-  const q = (req.query.q || '').toString().trim().toLowerCase();
-
+  const country = (req.query.country || '').toUpperCase();
   let items = [];
+  
   if (country && country !== 'ALL') {
     items = cache.newsByCountry.get(country) || [];
   } else {
     for (const arr of cache.newsByCountry.values()) items = items.concat(arr || []);
   }
-
-  if (q) {
-    const hay = (a) =>
-      `${a.title} ${a.summary} ${a.source} ${a.domain}`.toLowerCase();
-    items = items.filter(a => hay(a).includes(q));
-  }
-
+  
   res.json(items.slice(0, 200));
 });
 
-// SOLO PARA DIAGNÓSTICO: devuelve noticias sin filtrar por keywords (RSS + NewsAPI)
-app.get('/api/news-unfiltered', async (req, res) => {
-  const country = (req.query.country || '').toString().toUpperCase();
-
-  async function fetchCountryUnfiltered(countryISO) {
-    const feeds = RSS_SOURCES[countryISO] || [];
-    const items = [];
-
-    for (const feedUrl of feeds) {
-      try {
-        const feed = await parser.parseURL(feedUrl);
-        for (const it of (feed.items || [])) {
-          const art = normalizeArticle(it, countryISO);
-          if (!art.country) {
-            let domain = '';
-            try { domain = new URL(art.url).hostname.replace(/^www\./,''); } catch {}
-            art.country = DOMAIN_TO_ISO[domain] || countryISO || null;
-          }
-          items.push(art); // SIN filtro por keywords
-        }
-      } catch {}
-    }
-
-    const api = await fetchFromNewsAPI(countryISO);
-    return dedupe([...items, ...api]).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-  }
-
-  try {
-    if (country && country !== 'ALL') {
-      const list = await fetchCountryUnfiltered(country);
-      res.json(list.slice(0,200));
-    } else {
-      const all = [];
-      for (const iso of Object.keys(RSS_SOURCES)) {
-        const list = await fetchCountryUnfiltered(iso);
-        all.push(...list);
-      }
-      res.json(dedupe(all).slice(0,200));
-    }
-  } catch (e) {
-    res.status(500).json({ error:'debug failed', message: String(e) });
-  }
-});
-
-// (opcional) pequeño ping para confirmar despliegue
-app.get('/api/ping', (_,res)=>res.json({ok:true, ts:new Date().toISOString()}));
-
 app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`✅ Server: http://localhost:${PORT}`);
 });
-
