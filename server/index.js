@@ -4,50 +4,14 @@ import cors from 'cors';
 import axios from 'axios';
 import Parser from 'rss-parser';
 import { KEYWORDS_ALL_FLAT as KEYWORDS_ALL, KEYWORDS } from './keywords.js';
-import { matchesAnyKeyword } from './utils/matchesKeywords.js';
-import { matchesKeywordsByCountry } from './utils/matchesKeywords.js';
+import { matchesAnyKeyword, matchesKeywordsByCountry, getMatchStatistics } from './utils/matchesKeywords.js';
 
-
-
-
-function norm(s='') {
-  return s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '');
-}
-
-function containsAny(text, list) {
-  if (!Array.isArray(list) || !list.length) return false;
-  const t = ' ' + norm(text || '') + ' ';
-  return list.some(w => {
-    const pattern = new RegExp(`\\b${norm(w)}\\b`, 'i'); // palabra exacta
-    return pattern.test(t);
-  });
-}
-function matchesAnyKeyword(article, countryCode = 'ALL') {
-  const title = (article.title || '').toLowerCase();
-
-  if (countryCode !== 'ALL' && KEYWORDS[countryCode]) {
-    // Solo busca en las keywords del país indicado
-    return containsAny(title, KEYWORDS[countryCode].CRIMES || []);
-  } else {
-    // Busca en todos los países
-    return Object.keys(KEYWORDS).some(code =>
-      containsAny(title, KEYWORDS[code].CRIMES || [])
-    );
-  }
-}
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const headline = item.title || '';
-if (matchesAnyKeyword(item)) {
-  // 🔥 relevante — contiene keywords
-  filteredItems.push(item);
-}
+
 
 // In-memory cache
 const cache = {
