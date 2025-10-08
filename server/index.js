@@ -416,13 +416,16 @@ async function fetchFromRSS(countryISO) {
   for (const feedUrl of feeds) {
     try {
       const feed = await parser.parseURL(feedUrl);
+
       for (const it of feed.items || []) {
         const art = normalizeArticle(it, countryISO);
 
-        // Asigna país por dominio si existe en el mapa; si no, usa el del bloque
+        // Asignar país si no viene definido
         if (!art.country) {
           let domain = '';
-          try { domain = new URL(art.url).hostname.replace(/^www\./,''); } catch {}
+          try {
+            domain = new URL(art.url).hostname.replace(/^www\./, '');
+          } catch {}
           art.country = DOMAIN_TO_ISO[domain] || countryISO || null;
         }
 
@@ -430,9 +433,10 @@ async function fetchFromRSS(countryISO) {
         if (art.country && matchesAnyKeyword(art, art.country)) {
           items.push(art);
         }
+      }
+
     } catch (e) {
-      // opcional: log
-      // console.warn(`RSS error for ${countryISO} ${feedUrl}:`, e.message);
+      console.warn(`RSS error for ${countryISO} ${feedUrl}:`, e.message);
     }
   }
 
