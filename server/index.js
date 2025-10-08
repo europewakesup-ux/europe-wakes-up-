@@ -8,15 +8,7 @@ import { matchesAnyKeyword } from './utils/matchesKeywords.js';
 import { matchesKeywordsByCountry } from './utils/matchesKeywords.js';
 
 
-// --- Filtro local por keywords ---
-// Devuelve true si el título o el resumen contienen alguna keyword.
-function matchesAnyKeyword(article) {
-  const haystack = `${article.title || ''} ${article.summary || ''}`.toLowerCase();
-  return Array.isArray(KEYWORDS_ALL) && KEYWORDS_ALL.some(k => {
-    if (!k) return false;
-    return haystack.includes(String(k).toLowerCase());
-  });
-}
+
 
 function norm(s='') {
   return s
