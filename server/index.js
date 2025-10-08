@@ -4,6 +4,9 @@ import cors from 'cors';
 import axios from 'axios';
 import Parser from 'rss-parser';
 import { KEYWORDS_ALL_FLAT as KEYWORDS_ALL, KEYWORDS } from './keywords.js';
+import { matchesAnyKeyword } from './utils/matchesKeywords.js';
+import { matchesKeywordsByCountry } from './utils/matchesKeywords.js';
+
 
 // --- Filtro local por keywords ---
 // Devuelve true si el título o el resumen contienen alguna keyword.
@@ -28,25 +31,29 @@ function containsAny(text, list) {
   return list.some(w => t.includes(norm(String(w))));
 }
 
-function matchesAnyKeyword(article) {
-  const positiveText = `${article.title || ''} ${article.summary || ''}`;
+function matchesAnyKeyword(article, countryCode = 'ALL') {
+  const title = (article.title || '').toLowerCase();
 
-  const hasCrime =
-    containsAny(positiveText, KEYWORDS?.ES?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.FR?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.DE?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.IT?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.NL?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.SE?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.NO?.CRIMES || []) ||
-    containsAny(positiveText, KEYWORDS?.PT?.CRIMES || []);
-
-  return !!hasCrime;
+  if (countryCode !== 'ALL' && KEYWORDS[countryCode]) {
+    // Solo busca en las keywords del país indicado
+    return containsAny(title, KEYWORDS[countryCode].CRIMES || []);
+  } else {
+    // Busca en todos los países
+    return Object.keys(KEYWORDS).some(code =>
+      containsAny(title, KEYWORDS[code].CRIMES || [])
+    );
+  }
 }
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const headline = item.title || '';
+if (matchesAnyKeyword(item)) {
+  // 🔥 relevante — contiene keywords
+  filteredItems.push(item);
+}
 
 // In-memory cache
 const cache = {
